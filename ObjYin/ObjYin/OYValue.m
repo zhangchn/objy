@@ -211,3 +211,61 @@
 }
 @end
 
+@implementation OYUnionType
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        _values = [NSMutableSet set];
+    }
+    return self;
+}
++ (OYValue *)unionWithValues:(NSArray *)values {
+    OYUnionType *u = [[OYUnionType alloc] init];
+    for (OYValue *v in values) {
+        [u addValue:v];
+    }
+    if (u.size == 1) {
+        return u.first;
+    } else {
+        return u;
+    }
+}
+
++ (OYValue *)unionWithValue:(OYValue *)value, ...{
+    OYUnionType *u = nil;
+    OYValue *aValue;
+    va_list argList;
+    if (value) {
+        u = [[OYUnionType alloc] init];
+        [u addValue:value];
+        va_start(argList, value);
+        while ((aValue = va_arg(argList, id))) {
+            [u addValue:value];
+        }
+        va_end(argList);
+    }
+    return u;
+}
+
+- (void)addValue:(OYValue *)value {
+    if ([value isKindOfClass:[OYUnionType class]]) {
+        [self.values addObjectsFromArray:((OYUnionType *)value).values.allObjects];
+    } else {
+        [self.values addObject:value];
+    }
+}
+- (NSInteger)size {
+    return self.values.count;
+}
+
+- (OYValue *)first {
+    return [self.values.objectEnumerator nextObject];
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"(U %@)", [self.values.allObjects componentsJoinedByString:@" "]];
+}
+
+
+@end

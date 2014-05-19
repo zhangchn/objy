@@ -30,6 +30,7 @@
 + (NSMutableArray *)interpretNodes:(NSArray *)listOfNodes inScope:(OYScope *)scope;
 + (NSMutableArray *)typeCheckNodes:(NSArray *)listOfNodes inScope:(OYScope *)scope;
 + (NSString *)descriptionForNodes:(NSArray *)listOfNodes;
+
 @end
 
 @interface OYFun : OYNode
@@ -88,7 +89,7 @@
 + (OYScope *)typeCheckProperties:(OYScope *)unevaled inScope:(OYScope *)scope;
 + (void)mergeDefaultProperties:(OYScope *)properties scope:(OYScope *)scope;
 + (void)mergeTypeProperties:(OYScope *)properties scope:(OYScope *)s;
-+ (OYScope *)evalProperties:(OYScope *)unevaled scope:(OYScope *)s;
+//+ (OYScope *)evalProperties:(OYScope *)unevaled scope:(OYScope *)s;
 @end
 
 
@@ -153,7 +154,7 @@
 @property (nonatomic, strong) NSMutableArray *parents;
 @property (nonatomic, strong) OYScope *propertyForm;
 @property (nonatomic, strong) OYScope *properties;
-- (instancetype)initWithURL:(NSURL *)URL name:(OYName *)name parents:(NSArray *)parents propertyForm:(OYScope *)propertyForm start:(NSInteger)start end:(NSInteger)end line:(NSInteger)line column:(NSInteger)col;
+- (instancetype)initWithURL:(NSURL *)URL name:(OYName *)name parents:(NSMutableArray *)parents propertyForm:(OYScope *)propertyForm start:(NSInteger)start end:(NSInteger)end line:(NSInteger)line column:(NSInteger)col;
 @end
 
 @interface OYRecordLiteral : OYNode

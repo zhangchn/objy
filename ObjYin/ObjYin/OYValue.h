@@ -118,9 +118,10 @@ BOOL TypeIsSubtypeOfType(OYValue *type1, OYValue *type2, BOOL ret);
 
 @interface OYUnionType : OYValue
 @property (nonatomic, strong) NSMutableSet *values;
-+ (OYValue *)unionWithValues:(id<NSFastEnumeration>)values;
++ (OYValue *)unionWithValues:(NSArray *)values;
++ (OYValue *)unionWithValue:(OYValue *)value, ...;
 - (void)addValue:(OYValue *)value;
-- (int)size;
+- (NSInteger)size;
 - (OYValue *)first;
 @end
 
