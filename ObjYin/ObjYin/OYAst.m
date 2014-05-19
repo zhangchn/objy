@@ -902,3 +902,49 @@ unsigned int ParseBinaryString(NSString *binaryString) {
 }
 
 @end
+
+@implementation OYSubscript
+
+- (instancetype)initWithURL:(NSURL *)URL value:(OYNode *)value index:(OYNode *)index start:(NSInteger)start end:(NSInteger)end line:(NSInteger)line column:(NSInteger)col {
+    self = [super initWithURL:URL start:start end:end line:line column:col];
+    if (self) {
+        _value = value;
+        _index = index;
+    }
+    return self;
+}
+
+- (OYValue *)interpretInScope:(OYScope *)scope {
+
+}
+
+- (OYValue *)typeCheckInScope:(OYScope *)scope {
+
+}
+@end
+
+@implementation OYTuple
+
+- (instancetype)initWithURL:(NSURL *)URL elements:(NSMutableArray *)elements open:(OYNode *)open close:(OYNode *)close start:(NSInteger)start end:(NSInteger)end line:(NSInteger)line column:(NSInteger)col {
+    self = [super initWithURL:URL start:start end:end line:line column:col];
+    if (self) {
+        _elements = elements;
+        _open = open;
+        _close = close;
+    }
+    return self;
+}
+
+@end
+
+@implementation OYVectorLiteral
+
+- (instancetype)initWithURL:(NSURL *)URL elements:(NSMutableArray *)elements start:(NSInteger)start end:(NSInteger)end line:(NSInteger)line column:(NSInteger)col {
+    self = [super initWithURL:URL start:start end:end line:line column:col];
+    if (self) {
+        _elements = elements;
+    }
+    return self;
+}
+
+@end

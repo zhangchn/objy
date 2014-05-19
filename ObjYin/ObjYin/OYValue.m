@@ -339,3 +339,21 @@ BOOL TypeIsSubtypeOfType(OYValue *type1, OYValue *type2, BOOL ret) {
 }
 @end
 
+@implementation OYStringType
+
+- (NSString *)description { return @"String";}
+
+@end
+
+@implementation OYStringValue
+- (id)initWithString:(NSString *)value {
+    self = [super init];
+    if (self) {
+        _value = value;
+    }
+    return self;
+}
+- (NSString *)description { return [NSString stringWithFormat:@"\"%@\"", _value];}
+
+@end
+

@@ -185,5 +185,5 @@
 
 @interface OYVectorLiteral : OYNode
 @property (nonatomic, strong) NSMutableArray *elements;
-- (instancetype)initWithURL:(NSURL *)URL elements:(NSArray *)elements start:(NSInteger)start end:(NSInteger)end line:(NSInteger)line column:(NSInteger)col;
+- (instancetype)initWithURL:(NSURL *)URL elements:(NSMutableArray *)elements start:(NSInteger)start end:(NSInteger)end line:(NSInteger)line column:(NSInteger)col;
 @end
