@@ -269,3 +269,73 @@
 
 
 @end
+
+
+BOOL TypeIsSubtypeOfType(OYValue *type1, OYValue *type2, BOOL ret) {
+    if (!ret && [type2 isKindOfClass:[OYAnyType class]]) {
+        return YES;
+    }
+    if ([type1 isKindOfClass:[OYUnionType class]]) {
+        for (OYValue *t in ((OYUnionType *)type1).values) {
+            if (!TypeIsSubtypeOfType(t, type2, NO)) {
+                return NO;
+            }
+        }
+        return YES;
+    } else if ([type2 isKindOfClass:[OYUnionType class]]) {
+        return [((OYUnionType *)type2).values containsObject:type1];
+    } else {
+        return [type1 isEqual:type2];
+    }
+}
+
+@implementation OYType
++ (OYValue *)boolType {
+    static OYValue *boolType;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        boolType = [OYBoolType new];
+    });
+    return boolType;
+}
+
++ (OYValue *)intType {
+    static OYValue *intType;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        intType = [OYIntType new];
+    });
+    return intType;
+}
++ (OYValue *)stringType {
+    static OYValue *stringType;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        stringType = [OYStringType new];
+    });
+    return stringType;
+}
+@end
+
+@implementation OYRecordValue
+
+- (id)initWithName:(NSString *)name type:(OYRecordType *)type properties:(OYScope *)properties {
+    self = [super init];
+    if (self) {
+        _name = name;
+        _type = type;
+        _properties = properties;
+    }
+    return self;
+}
+
+- (NSString *)description {
+    NSMutableArray *array = [NSMutableArray new];
+    [array addObject:self.name ? self.name : @"_"];
+    [self.properties.keySet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        [array addObject:[NSString stringWithFormat:@"[%@ %@]", obj, [self.properties lookUpLocalName:obj]]];
+    }];
+    return [NSString stringWithFormat:@"(record %@)", [array componentsJoinedByString:@" "]];
+}
+@end
+
