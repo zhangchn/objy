@@ -129,33 +129,55 @@
 + (OYScope *)initialScope {
     OYScope *s = [OYScope new];
     [s setValue:[OYAdd new] inName:@"+"];
-//    init.putValue("+", new Add());
-//    init.putValue("-", new Sub());
-//    init.putValue("*", new Mult());
-//    init.putValue("/", new Div());
-//    
-//    init.putValue("<", new Lt());
-//    init.putValue("<=", new LtE());
-//    init.putValue(">", new Gt());
-//    init.putValue(">=", new GtE());
-//    init.putValue("=", new Eq());
-//    init.putValue("and", new And());
-//    init.putValue("or", new Or());
-//    init.putValue("not", new Not());
-//    
-//    init.putValue("print", new Print());
-//    
-//    init.putValue("true", new BoolValue(true));
-//    init.putValue("false", new BoolValue(false));
-//    
-//    init.putValue("Int", Type.INT);
-//    init.putValue("Bool", Type.BOOL);
-//    init.putValue("String", Type.STRING);
+    [s setValue:[OYSub new] inName:@"-"];
+    [s setValue:[OYMult new] inName:@"*"];
+    [s setValue:[OYDiv new] inName:@"/"];
+
+    [s setValue:[OYLt new] inName:@"<"];
+    [s setValue:[OYLtE new] inName:@"<="];
+    [s setValue:[OYGt new] inName:@">"];
+    [s setValue:[OYGtE new] inName:@">-="];
+    [s setValue:[OYEq new] inName:@"="];
+    [s setValue:[OYAnd new] inName:@"and"];
+    [s setValue:[OYOr new] inName:@"or"];
+    [s setValue:[OYNot new] inName:@"not"];
+
+    [s setValue:[OYPrint new] inName:@"print"];
+    [s setValue:[[OYBoolValue alloc] initWithBoolean:YES] inName:@"true"];
+    [s setValue:[[OYBoolValue alloc] initWithBoolean:NO] inName:@"false"];
+    [s setValue:[OYType intType] inName:@"Int"];
+    [s setValue:[OYType boolType] inName:@"Bool"];
+    [s setValue:[OYType stringType] inName:@"String"];
     return s;
 }
 
 + (OYScope *)initialTypeScope {
     OYScope *s = [OYScope new];
+
+    [s setValue:[OYAdd new] inName:@"+"];
+    [s setValue:[OYSub new] inName:@"-"];
+    [s setValue:[OYMult new] inName:@"*"];
+    [s setValue:[OYDiv new] inName:@"/"];
+
+    [s setValue:[OYLt new] inName:@"<"];
+    [s setValue:[OYLtE new] inName:@"<="];
+    [s setValue:[OYGt new] inName:@">"];
+    [s setValue:[OYGtE new] inName:@">-="];
+    [s setValue:[OYEq new] inName:@"="];
+    [s setValue:[OYAnd new] inName:@"and"];
+    [s setValue:[OYOr new] inName:@"or"];
+    [s setValue:[OYNot new] inName:@"not"];
+    [s setValue:[OYU new] inName:@"U"];
+
+    [s setValue:[OYType boolType] inName:@"true"];
+    [s setValue:[OYType boolType] inName:@"false"];
+
+    [s setValue:[OYType intType] inName:@"Int"];
+    [s setValue:[OYType boolType] inName:@"Bool"];
+
+    [s setValue:[OYType stringType] inName:@"String"];
+    [s setValue:[OYValue anyValue] inName:@"Any"];
+
     return s;
 }
 // put(name,key,value)

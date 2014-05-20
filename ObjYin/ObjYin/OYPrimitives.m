@@ -49,3 +49,119 @@
     return nil;
 }
 @end
+
+
+@implementation OYAnd
+
+- (id)init {
+    self = [super initWithName:@"and" arity:2];
+    return self;
+}
+
+- (OYValue *)apply:(NSArray *)args inLocation:(OYNode *)location {
+    OYValue *value1 = args[0];
+    OYValue *value2 = args[1];
+
+    if ([value1 isKindOfClass:[OYBoolValue class]] && [value2 isKindOfClass:[OYBoolValue class]]) {
+        return [[OYBoolValue alloc] initWithBoolean:((OYBoolValue *)value1).value  && ((OYBoolValue *)value2).value];
+    }
+    NSAssert(0, @"%@\nincorrect argument types for and: %@, %@", location, value1, value2);
+    return nil;
+}
+
+- (OYValue *)typeCheck:(NSArray *)args inLocation:(OYNode *)location {
+    OYValue *value1 = args[0];
+    OYValue *value2 = args[1];
+
+    if ([value1 isKindOfClass:[OYBoolType class]] && [value2 isKindOfClass:[OYBoolType class]]) {
+        return [OYType boolType];
+    }
+    NSAssert(0, @"%@\nincorrect argument types for and: %@, %@", location, value1, value2);
+    return nil;
+}
+@end
+
+@implementation OYDiv
+- (id)init {
+    self = [super initWithName:@"/" arity:2];
+    return self;
+}
+
+- (OYValue *)apply:(NSArray *)args inLocation:(OYNode *)location {
+    OYValue *value1 = args[0];
+    OYValue *value2 = args[1];
+
+    if ([value1 isKindOfClass:[OYIntValue class]] && [value2 isKindOfClass:[OYIntValue class]]) {
+        return [[OYIntValue alloc] initWithInteger:((OYIntValue *)value1).value  / ((OYIntValue *)value2).value];
+    }
+    if ([value1 isKindOfClass:[OYFloatValue class]] && [value2 isKindOfClass:[OYFloatValue class]]) {
+        return [[OYFloatValue alloc] initWithValue:((OYFloatValue *)value1).value  / ((OYFloatValue *)value2).value];
+    }
+    if ([value1 isKindOfClass:[OYFloatValue class]] && [value2 isKindOfClass:[OYIntValue class]]) {
+        return [[OYFloatValue alloc] initWithValue:((OYFloatValue *)value1).value  / ((OYIntValue *)value2).value];
+    }
+    if ([value1 isKindOfClass:[OYIntValue class]] && [value2 isKindOfClass:[OYFloatValue class]]) {
+        return [[OYFloatValue alloc] initWithValue:((OYIntValue *)value1).value  / ((OYFloatValue *)value2).value];
+    }
+
+    NSAssert(0, @"%@\nincorrect argument types for /: %@, %@", location, value1, value2);
+    return nil;
+}
+
+- (OYValue *)typeCheck:(NSArray *)args inLocation:(OYNode *)location {
+    OYValue *value1 = args[0];
+    OYValue *value2 = args[1];
+
+    if ([value1 isKindOfClass:[OYFloatType class]] || [value2 isKindOfClass:[OYFloatType class]]) {
+        return [OYFloatType new];
+    }
+    if ([value1 isKindOfClass:[OYIntType class]] && [value2 isKindOfClass:[OYIntType class]]) {
+        return [OYType intType];
+    }
+    NSAssert(0, @"%@\nincorrect argument types for and: %@, %@", location, value1, value2);
+    return nil;
+
+}
+@end
+
+@implementation OYEq
+- (id)init {
+    self = [super initWithName:@"=" arity:2];
+    return self;
+}
+
+- (OYValue *)apply:(NSArray *)args inLocation:(OYNode *)location {
+    OYValue *value1 = args[0];
+    OYValue *value2 = args[1];
+
+    if ([value1 isKindOfClass:[OYIntValue class]] && [value2 isKindOfClass:[OYIntValue class]]) {
+        return [[OYBoolValue alloc] initWithBoolean:((OYIntValue *)value1).value  == ((OYIntValue *)value2).value];
+    }
+    if ([value1 isKindOfClass:[OYFloatValue class]] && [value2 isKindOfClass:[OYFloatValue class]]) {
+        return [[OYBoolValue alloc] initWithBoolean:((OYFloatValue *)value1).value  == ((OYFloatValue *)value2).value];
+    }
+    if ([value1 isKindOfClass:[OYFloatValue class]] && [value2 isKindOfClass:[OYIntValue class]]) {
+        return [[OYBoolValue alloc] initWithBoolean:((OYFloatValue *)value1).value  == ((OYIntValue *)value2).value];
+    }
+    if ([value1 isKindOfClass:[OYIntValue class]] && [value2 isKindOfClass:[OYFloatValue class]]) {
+        return [[OYBoolValue alloc] initWithBoolean:((OYIntValue *)value1).value  == ((OYFloatValue *)value2).value];
+    }
+
+    NSAssert(0, @"%@\nincorrect argument types for =: %@, %@", location, value1, value2);
+    return nil;
+
+}
+
+- (OYValue *)typeCheck:(NSArray *)args inLocation:(OYNode *)location {
+    OYValue *value1 = args[0];
+    OYValue *value2 = args[1];
+
+    if (!([value1 isKindOfClass:[OYFloatType class]] || [value1 isKindOfClass:[OYIntType class]])
+        || !([value2 isKindOfClass:[OYFloatType class]] || [value2 isKindOfClass:[OYIntType class]])) {
+        NSAssert(0, @"%@\nincorrect argument types for =: %@, %@", location, value1, value2);
+    }
+
+    return [OYType boolType];
+    
+}
+@end

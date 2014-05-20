@@ -915,11 +915,52 @@ unsigned int ParseBinaryString(NSString *binaryString) {
 }
 
 - (OYValue *)interpretInScope:(OYScope *)scope {
+    OYValue *vector = [self.value interpretInScope:scope];
+    OYValue *indexValue = [self.index interpretInScope:scope];
 
+    if (!([vector isKindOfClass:[OYVector class]])) {
+        NSAssert(0, @"%@\nsubscripting non-vector: %@", self.value, vector);
+        return nil;
+    }
+    if (![indexValue isKindOfClass:[OYIntValue class]]) {
+        NSAssert(0, @"%@\nsubscript %d is not an integer: %@", self.value, (int)self.index, indexValue);
+        return nil;
+    }
+    NSMutableArray *values = ((OYVector *)vector).values;
+    NSInteger i = ((OYIntValue *)indexValue).value;
+    if (i >= 0 && i < values.count) {
+        return values[i];
+    } else {
+        NSAssert(0, @"%@\nsubscript out of bound: %d v.s. [0, %d]", self, (int)i, (int)(values.count - 1));
+        return nil;
+    }
 }
 
 - (OYValue *)typeCheckInScope:(OYScope *)scope {
+    return nil;
+}
+- (void)setValue:(id)value inScope:(OYScope *)scope {
+    OYValue *vector = [value interpretInScope:scope];
+    OYValue *indexValue = [self.index interpretInScope:scope];
+    if (![vector isKindOfClass:[OYVector class]]) {
+        NSAssert(0, @"%@\nsubscripting non-vector: %@", value, vector);
+    }
 
+    if (![indexValue isKindOfClass:[OYIntValue class]]) {
+        NSAssert(0, @"%@\nsubscript %d is not an integer: %@", value, (int)self.index, indexValue);
+    }
+    OYVector *vector1 = (OYVector *)vector;
+    NSInteger i = ((OYIntValue *)indexValue).value;
+
+    if (i >= 0 && i < vector1.size) {
+        [vector1 setValue:value atIndex:i];
+    } else {
+        NSAssert(0, @"%@subscript out of bound: %d v.s. [0, %d]" , self, (int)i , (int)(vector1.size - 1));
+    }
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"(ref %@ %d)", self.value, (int)self.index];
 }
 @end
 
@@ -935,6 +976,25 @@ unsigned int ParseBinaryString(NSString *binaryString) {
     return self;
 }
 
+- (OYNode *)getHead {
+    if (!self.elements.count) {
+        return nil;
+    } else {
+        return self.elements[0];
+    }
+}
+
+- (OYValue *)interpretInScope:(OYScope *)scope {
+    return nil;
+}
+
+- (OYValue *)typeCheckInScope:(OYScope *)scope {
+    return nil;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@%@%@", (self.open ? self.open : @""), [self.elements componentsJoinedByString:@" "], (self.close ? self.close : @"")];
+}
 @end
 
 @implementation OYVectorLiteral

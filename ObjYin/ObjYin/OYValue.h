@@ -125,3 +125,10 @@ BOOL TypeIsSubtypeOfType(OYValue *type1, OYValue *type2, BOOL ret);
 - (OYValue *)first;
 @end
 
+@interface OYVector  : OYValue
+@property (nonatomic, strong) NSMutableArray *values;
+- (id)initWithValues:(NSMutableArray *)values;
+- (void)setValue:(OYValue *)value atIndex:(NSUInteger)idx;
+- (NSInteger)size;
+
+@end

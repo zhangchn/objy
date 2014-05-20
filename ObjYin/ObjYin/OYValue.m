@@ -357,3 +357,29 @@ BOOL TypeIsSubtypeOfType(OYValue *type1, OYValue *type2, BOOL ret) {
 
 @end
 
+@implementation OYVector
+
+- (id)initWithValues:(NSMutableArray *)values {
+    self = [super init];
+    if (self) {
+        _values = values;
+    }
+    return self;
+}
+
+- (void)setValue:(OYValue *)value atIndex:(NSUInteger)idx {
+    self.values[idx] = value;
+}
+
+- (NSInteger)size {
+    return self.values.count;
+}
+
+- (NSString *)description {
+    NSMutableArray *descs = [NSMutableArray array];
+    [self.values enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [descs addObject:[obj description]];
+    }];
+    return [NSString stringWithFormat:@"(%@)", [descs componentsJoinedByString:@" "]];
+}
+@end

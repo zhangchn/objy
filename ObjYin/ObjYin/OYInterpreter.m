@@ -38,8 +38,10 @@
 @end
 
 int interpreter_main(int argc, const char ** argv){
-    NSString *argv1 = [NSString stringWithCString:argv[1] encoding:NSUTF8StringEncoding];// argv[1];
-    
+    NSString *argv1 = nil;
+    if (argc > 1) {
+        argv1 = [NSString stringWithCString:argv[1] encoding:NSUTF8StringEncoding];
+    }
     NSURL *URL = [NSURL URLWithString:argv1];
     OYInterpreter *i = [[OYInterpreter alloc] initWithContentOfURL:URL];
     NSLog(@"%@", [i interpreteContentOfURL:URL]);
