@@ -29,6 +29,7 @@
 - (void)setValue:(id)value forKey:(NSString *)key inName:(NSString *)name;
 - (void)setValuesFromProperties:(NSDictionary *)properties inName:(NSString *)name;
 - (void)setValue:(OYValue *)value inName:(NSString *)name;
+- (void)setType:(OYType *)type inName:(NSString *)name;
 - (NSSet *)keySet;
 - (NSArray *)allKeys;
 - (BOOL)containsKey:(NSString *)key;
