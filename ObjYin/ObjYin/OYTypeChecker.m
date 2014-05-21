@@ -17,6 +17,8 @@
     self = [super init];
     if (self) {
         _URL = URL;
+        _uncalled = [NSMutableSet new];
+        _callStack = [NSMutableSet new];
     }
     return self;
 }
