@@ -203,6 +203,10 @@
     [self setValue:value forKey:@"value" inName:name];
 }
 
+- (void)setType:(OYType *)type inName:(NSString *)name {
+    [self setValue:value forKey:@"type" inName:name];
+}
+
 - (NSSet *)keySet {
     return [NSSet setWithArray:self.table.allKeys];
 }
