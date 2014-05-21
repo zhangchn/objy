@@ -173,6 +173,33 @@
 }
 @end
 
+// XXX: not implemented
+@implementation OYBigInt
+//
+//- (instancetype)initWithURL:(NSURL *)URL content:(NSString *)content start:(NSInteger)start end:(NSInteger)end line:(NSInteger)line column:(NSInteger)col {
+//    self = [super initWithURL:URL start:start end:end line:line column:col];
+//    if (self) {
+//        _content = content;
+//        int sign;
+//
+//        if ([content hasPrefix:@"+"]) {
+//            sign = 1;
+//            content = [content substringFromIndex:1];
+//        } else if ([content hasPrefix:@"-"]) {
+//            sign = -1;
+//            content = [content substringFromIndex:1];
+//        } else {
+//            sign = 1;
+//        }
+//
+//        if ([content hasPrefix:<#(NSString *)#>]) {
+//            <#statements#>
+//        }
+//    }
+//    return self;
+//}
+
+@end
 @implementation OYBlock
 
 - (instancetype)initWithURL:(NSURL *)URL statements:(NSMutableArray *)statements start:(NSInteger)start end:(NSInteger)end line:(NSInteger)line column:(NSInteger)col {
