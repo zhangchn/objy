@@ -12,22 +12,21 @@
 #import "OYScope.h"
 #import "OYAst.h"
 
+
 @implementation OYTypeChecker
+static OYTypeChecker *selfChecker;
 - (instancetype)initWithURL:(NSURL *)URL {
     self = [super init];
     if (self) {
         _URL = URL;
+        _uncalled = [NSMutableSet new];
+        _callStack = [NSMutableSet new];
     }
     return self;
 }
 
 + (OYTypeChecker *)selfChecker {
-    static OYTypeChecker *checker;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        checker = [OYTypeChecker new];
-    });
-    return checker;
+    return selfChecker;
 }
 - (OYValue *)typeCheckURL:(NSURL *)URL {
     OYNode *program;
@@ -89,3 +88,12 @@
 //    }
 }
 @end
+
+int typechecker_main(int argc, char **argv) {
+    NSString *argv1 = [NSString stringWithCString:argv[1] encoding:NSUTF8StringEncoding];
+    OYTypeChecker *tc = [[OYTypeChecker alloc] initWithURL:[NSURL URLWithString:argv1]];
+    selfChecker = tc;
+    OYValue *result = [tc typeCheckURL:[NSURL URLWithString:argv1]];
+    NSLog(@"%@", result);
+    return 0;
+}
