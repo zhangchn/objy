@@ -80,7 +80,7 @@ OYNode *parseNode(OYNode *prenode) {
             }
             
             // -------------------- definition --------------------
-            if ([keyword isEqualToString:@"def"]) {
+            if ([keyword isEqualToString:@"define"]) {
                 if (elements.count == 3) {
                     OYNode *pattern = parseNode(elements[1]);
                     OYNode *value = parseNode(elements[2]);

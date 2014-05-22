@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @class OYValue;
+@class OYType;
 @interface OYScope : NSObject <NSCopying>
 @property (nonatomic, strong) NSMutableDictionary *table;
 @property (nonatomic, weak) OYScope *parent;

@@ -95,8 +95,8 @@
 }
 - (OYValue *)lookUpPropertyName:(NSString *)name key:(NSString *)key {
     id v = [self lookUpPropertyLocalName:(NSString *)name key:key];
-    if (!v) {
-        return nil;
+    if (v) {
+        return v;
     } else if (self.parent) {
         return [self.parent lookUpPropertyName:name key:key];
     } else {
@@ -204,7 +204,7 @@
 }
 
 - (void)setType:(OYType *)type inName:(NSString *)name {
-    [self setValue:value forKey:@"type" inName:name];
+    [self setValue:type forKey:@"type" inName:name];
 }
 
 - (NSSet *)keySet {

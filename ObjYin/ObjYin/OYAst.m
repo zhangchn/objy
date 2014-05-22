@@ -259,7 +259,7 @@
         if (_args.positional.count && !_args.keywords.count) {
             for (int i = 0; i < _args.positional.count; i++) {
                 OYValue *value = [_args.positional[i] interpretInScope:scope];
-                [funScope setValue:value inName:params[i]];
+                [funScope setValue:value inName:[params[i] identifier]];
                 //            funScope.putValue(params.get(i).id, value);
             }
         } else {

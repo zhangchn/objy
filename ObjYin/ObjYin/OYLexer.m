@@ -227,7 +227,10 @@ BOOL isIdentifierChar(unichar c) {
     static NSCharacterSet *identifierCharSet;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        identifierCharSet = [NSCharacterSet characterSetWithCharactersInString:@"~!@#$%^&*-_=+|:;,<>?/"];
+        NSMutableCharacterSet *charSet = [NSMutableCharacterSet alphanumericCharacterSet];
+        [charSet addCharactersInString:@"~!@#$%^&*-_=+|:;,<>?/"];
+        identifierCharSet = charSet;
+//        identifierCharSet = [NSCharacterSet characterSetWithCharactersInString:@"~!@#$%^&*-_=+|:;,<>?/"];
     });
     return isalnum(c) || [identifierCharSet characterIsMember:c];
 }
