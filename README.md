@@ -35,6 +35,6 @@ Due to the nature of ObjC's dynamic typing, it is impossible to reinforce many c
 
 More targets (typechecker, parser, etc.) are missing for now.
 
-GNU AGPLv3 license: I do not personally favor GNU licenses and is too lazy to add one, feel free to add if you need to.
+GNU AGPLv3 license: I do not personally favor GNU licenses and am too lazy to add one, feel free to add if you need to.
 
 This is a weekend-project, do not expect too much, after all.
