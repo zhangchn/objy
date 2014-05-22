@@ -1,4 +1,4 @@
-objy
+ObjYin
 ===
 
 This is an Objective-C translation of the Java implementation of [yinwang0](https://github.com/yinwang0)'s [Yin Programming Language](https://github.com/yinwang0/yin/).
@@ -11,9 +11,11 @@ Java classes and APIs were replaced with Cocoa's.
 
 All classes were derived from `NSObject`.
 
-`toString()`s were replaced with `- description`.
+`String`s were replaced with `NSString`s , `List<>`s were replaced with `NSMutableArray`s, `Map<>`s were replaced with `NSMutableDictionary`s, `Set<>`s were replaced with `NSMutableSet`s, and `null`s were replaced with `nil`s.
 
-In some APIs, order of parameters were changed to fit in the naming convetion of Cocoa, more or less.
+`toString()`s were replaced with `- description`s.
+
+In some APIs, orders of parameters were changed to fit in the naming convetion of Cocoa, more or less.
 
 `NSURL` was used to replace `file` parameters all around, so the first and only supported command-line parameter of interpreter should be prepended with 'file://' before any path. 'http' protocol was not tested but is likely to work.
 
