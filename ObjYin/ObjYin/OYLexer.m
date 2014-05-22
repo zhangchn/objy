@@ -117,7 +117,7 @@
     }
     
     NSInteger end = _offset;
-    NSString *content = [_text substringWithRange:NSMakeRange(start + [@"\"" length], end - [@"\"" length] - start - [@"\"" length] + 1)];//(
+    NSString *content = [_text substringWithRange:NSMakeRange(start + [@"\"" length], end - [@"\"" length] - start - [@"\"" length])];//(
 //                                    start + Constants.STRING_START.length(),
 //                                    end - Constants.STRING_END.length());
     return [[OYStr alloc] initWithURL:self.URL value:content start:start end:end line:startLine column:startCol];
@@ -133,7 +133,7 @@
         [self forward];
     }
     
-    NSString *content = [_text substringWithRange:NSMakeRange(start, _offset - start + 1)];
+    NSString *content = [_text substringWithRange:NSMakeRange(start, _offset - start)];
     
     OYIntNum *intNum = [OYIntNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol];//(content, file, start, offset, startLine, startCol);
     if (intNum) {
@@ -160,7 +160,7 @@
         [self forward];
     }
     
-    NSString *content = [_text substringWithRange:NSMakeRange(start, _offset - start + 1)];
+    NSString *content = [_text substringWithRange:NSMakeRange(start, _offset - start)];
     if ([content hasPrefix:@":"]) {
         return [[OYKeyword alloc] initWithURL:self.URL identifier:[content substringFromIndex:1] start:start end:_offset line:startLine column:startCol];
 //        return new Keyword(content.substring(1), file, start, offset, startLine, startCol);
@@ -211,7 +211,7 @@
     }
     
     // case 5. syntax error
-    NSString *message = [NSString stringWithFormat:@"unrecognized syntax: %@", [_text substringWithRange:NSMakeRange(_offset, 2)]];
+    NSString *message = [NSString stringWithFormat:@"unrecognized syntax: %@", [_text substringWithRange:NSMakeRange(_offset, 1)]];
     [[[OYParserException alloc] initWithMessage:message line:_line col:_col start:_offset] raise];
 //    throw new ParserException("unrecognized syntax: " + text.substring(offset, offset + 1),
 //                              line, col, offset);
