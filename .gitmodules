@@ -1,0 +1,3 @@
+[submodule "ObjYin/JKBigInterger"]
+	path = ObjYin/JKBigInterger
+	url = https://github.com/kirsteins/JKBigInteger.git
