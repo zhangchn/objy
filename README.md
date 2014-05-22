@@ -1,7 +1,7 @@
 objy
 ===
 
-This is an Objective-C translation of the Java implementation of yinwang0's Yin Programming Language.
+This is an Objective-C translation of the Java implementation of [yinwang0](https://github.com/yinwang0)'s [Yin Programming Language](https://github.com/yinwang0/yin/).
 
 It has no theoretical meaning per se, but only serves the purpose to prove a personal belief that Java IS Objective-C.
 
