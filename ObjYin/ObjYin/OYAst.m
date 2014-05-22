@@ -294,6 +294,133 @@
         return [OYValue voidValue];
     }
 }
+
+- (OYValue *)typeCheckInScope:(OYScope *)scope {
+    OYValue *fun = [self.op typeCheckInScope:scope];
+    if ([fun isKindOfClass:[OYFunType class]]) {
+        OYFunType *funtype = (OYFunType *)fun;
+        OYScope *funScope = [[OYScope alloc] initWithParentScope:funtype.env];
+
+        NSMutableArray *params = funtype.fun.params;
+
+        // set default values for parameters
+        if (funtype.properties) {
+            [OYDeclare mergeTypeProperties:funtype.properties scope:funScope];
+        }
+
+        if (self.args.positional.count && !self.args.keywords.count) {
+            // positional
+            if (self.args.positional.count != params.count) {
+                NSAssert(0, @"%@\ncalling function with wrong number of arguments. expected: %d actual: %d", self.op, (int)params.count, (int)self.args.positional.count);
+            }
+            for (int i = 0; i < self.args.positional.count; i++) {
+                OYValue *value = [self.args.positional[i] typeCheckInScope:scope];
+                OYValue *expected = [funScope lookUpName:[params[i] identifier]];
+                if (!TypeIsSubtypeOfType(value, expected, false)) {
+                    NSAssert(0, @"%@\ntype error. expected: %@, actual: %@", self.args.positional[i], expected, value);
+                }
+                [funScope setValue:value inName:[params[i] identifier]];
+            }
+        } else {
+            // keywords
+            NSMutableSet *seen = [NSMutableSet new];
+            for (OYName *param in params) {
+                OYNode *actual = self.args.keywords[param.identifier];
+                if (actual) {
+                    [seen addObject:param.identifier];
+                    OYValue *value = [actual typeCheckInScope:funScope];
+                    OYValue *expected = [funScope lookUpName:param.identifier];
+                    if (!TypeIsSubtypeOfType(value, expected, NO)) {
+                        NSAssert(0, @"%@\ntype error. expected: %@, actual: %@", actual, expected, value);
+                    }
+                    [funScope setValue:value inName:param.identifier];
+                } else {
+                    NSAssert(0, @"%@\nargument not supplied for: %@", self, param);
+                    return [OYValue voidValue];
+                }
+            }
+            NSMutableArray *extra = [NSMutableArray new];
+            [self.args.keywords enumerateKeysAndObjectsUsingBlock:^(NSString *identifier, id obj, BOOL *stop) {
+                if (![seen containsObject:identifier]) {
+                    [extra addObject:identifier];
+                }
+            }];
+
+            if (extra.count) {
+                NSAssert(0, @"%@\nextra keyword arguments: %@", self, extra);
+                return [OYValue voidValue];
+            }
+        }
+
+        id retType = [funtype.properties lookUpPropertyLocalName:@"->" key:@"type"];
+        if (retType) {
+            if ([retType isKindOfClass:[OYNode class]]) {
+                return [((OYNode *) retType) typeCheckInScope:funScope];
+            } else {
+                NSAssert(0, @"illegal return type: %@", retType);
+                return nil;
+            }
+        } else {
+            if ([[[OYTypeChecker selfChecker] callStack] containsObject:fun]) {
+                NSAssert(0, @"%@\nYou must specify return type for recursive functions: %@", self.op, self.op);
+                return nil;
+            }
+            [[OYTypeChecker selfChecker].callStack addObject:fun];
+            OYValue *actual = [funtype.fun.body typeCheckInScope:funScope];
+            [[OYTypeChecker selfChecker].callStack removeObject:fun];
+            return actual;
+        }
+    } else if ([fun isKindOfClass:[OYRecordType class]]) {
+        OYRecordType *template = (OYRecordType *) fun;
+        OYScope *values = [OYScope new];
+
+        // set default values for fields
+        [OYDeclare mergeDefaultProperties:template.properties scope:values];
+
+        // set actual values, overwrite defaults if any
+        [self.args.keywords enumerateKeysAndObjectsUsingBlock:^(id key, OYNode *node, BOOL *stop) {
+            if (! [template.properties.keySet containsObject:key]) {
+                NSAssert(0, @"%@\nextra keyword argument: %@", self, key);
+            }
+            OYValue *actual = [self.args.keywords[key] typeCheckInScope:scope];
+            OYValue *expected = [template.properties lookUpLocalTypeName:key];
+            if (!TypeIsSubtypeOfType(actual, expected, NO)) {
+                NSAssert(0, @"%@\ntype error. expected: %@, actual: %@", self, expected, actual);
+            }
+            [values setValue:[node typeCheckInScope:scope] inName:key];
+        }];
+
+        // check uninitialized fields
+        for (NSString *field in template.properties.keySet) {
+            if (![values lookUpLocalName:field]) {
+                NSAssert(0, @"%@\nfield is not initialized: %@", self, field);
+            }
+        }
+
+        // instantiate
+//        return new RecordValue(template.name, template, values);
+        return [[OYRecordValue alloc] initWithName:template.name type:template properties:values];
+    } else if ([fun isKindOfClass:[OYPrimFun class]]) {
+        OYPrimFun *prim = (OYPrimFun *) fun;
+        if (prim.arity >= 0 && self.args.positional.count != prim.arity) {
+            NSAssert(0, @"%@\nincorrect number of arguments for primitive %@, expecting %ld, but got %ld", self, prim.name, (long )prim.arity, (long )self.args.positional.count);
+            return nil;
+        } else {
+            NSArray *args = [OYNode typeCheckNodes:self.args.positional inScope:scope];
+            return [prim typeCheck:args inLocation:self];
+        }
+    } else {
+        NSAssert(0, @"%@\ncalling non-function: %@", self.op, fun);
+        return [OYValue voidValue];
+    }
+}
+- (NSString *)description {
+    if (self.args.positional.count) {
+        return [NSString stringWithFormat:@"(%@ %@)", self.op, self.args];
+    } else {
+        return [NSString stringWithFormat:@"(%@)", self.op];
+    }
+}
 @end
 
 @implementation OYDeclare
@@ -418,7 +545,7 @@
     return [OYValue voidValue];
 }
 - (NSString *)description {
-    return [NSString stringWithFormat:@"(def %@ %@)", self.pattern, self.value];
+    return [NSString stringWithFormat:@"(define %@ %@)", self.pattern, self.value];
 }
 @end
 
