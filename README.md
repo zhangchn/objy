@@ -23,7 +23,7 @@ In some APIs, orders of parameters were changed to fit in the naming convetion o
 
 In Xcode, to debug using a test script, add parameters in Edit schemes-> Run ObjYin -> Arguments -> Arguments Passed On Launch, e.g.:
   
-    file://$SRCROOT/Tests/expr.yin (where $SRCROOT resolves to the path of the source code folder by Xcode)
+    file://$SRCROOT/Tests/expr.yin (where $SRCROOT would be resolved to the path of the source code folder by Xcode)
 
 ### What's working so far
 
