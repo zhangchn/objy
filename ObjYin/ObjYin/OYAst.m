@@ -1160,5 +1160,11 @@ unsigned int ParseBinaryString(NSString *binaryString) {
     }
     return self;
 }
+- (OYValue *)interpretInScope:(OYScope *)scope {
+    return [[OYVector alloc] initWithValues:[OYNode interpretNodes:self.elements inScope:scope]];
+}
 
+- (OYValue *)typeCheckInScope:(OYScope *)scope {
+    return [[OYVector alloc] initWithValues:[OYNode typeCheckNodes:self.elements inScope:scope]];
+}
 @end
