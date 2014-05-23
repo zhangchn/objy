@@ -21,6 +21,8 @@ In some APIs, orders of parameters were changed to fit in the naming convetion o
 
 `NSURL` was used to replace `file` parameters all around, so the first and only supported command-line parameter of interpreter should be prepended with 'file://' before any path. 'http' protocol was not tested but is likely to work.
 
+Constants in Constants.java were replaced directly with string literals just in place.
+
 In Xcode, to debug using a test script, add parameters in Edit schemes-> Run ObjYin -> Arguments -> Arguments Passed On Launch, e.g.:
   
     file://$SRCROOT/Tests/expr.yin (where $SRCROOT would be resolved to the path of the source code folder by Xcode)
