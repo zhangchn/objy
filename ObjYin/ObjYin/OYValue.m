@@ -380,6 +380,6 @@ BOOL TypeIsSubtypeOfType(OYValue *type1, OYValue *type2, BOOL ret) {
     [self.values enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [descs addObject:[obj description]];
     }];
-    return [NSString stringWithFormat:@"(%@)", [descs componentsJoinedByString:@" "]];
+    return [NSString stringWithFormat:@"[%@]", [descs componentsJoinedByString:@" "]];
 }
 @end
