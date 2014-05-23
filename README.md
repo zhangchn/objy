@@ -3,7 +3,7 @@ ObjYin
 
 ObjYin is an Objective-C translation of the Java implementation of [yinwang0](https://github.com/yinwang0)'s [Yin Programming Language](https://github.com/yinwang0/yin/).
 
-It has no theoretical significance per se, but only serves the purpose to prove a personal belief that Java IS Objective-C.
+It has no theoretical significance per se, but only serves the purpose to support a personal belief that Java IS Objective-C.
 
 ### Implementation details
 
@@ -27,7 +27,7 @@ In Xcode, to debug using a test script, add parameters in Edit schemes-> Run Obj
 
 ### What's working so far
 
-`expr.yin` seems to work. Bugs may exist for others.
+It seems that ObjYin has successfully interpreted `expr.yin`, `array.yin` and `recursion-direct.yin`. Bugs may exist for others.
 
 ### Missing parts
 
