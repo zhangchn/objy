@@ -77,7 +77,7 @@
         if (idx) {
             [desc appendString:@" "];
         }
-        [desc appendString:e];
+        [desc appendString:[e description]];
     }];
     return desc;
 }
