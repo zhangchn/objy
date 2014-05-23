@@ -416,9 +416,9 @@
 }
 - (NSString *)description {
     if (self.args.positional.count) {
-        return [NSString stringWithFormat:@"(%@ %@)", self.op, self.args];
+        return [NSString stringWithFormat:@"(%@ %@)", [self.op description], [self.args description]];
     } else {
-        return [NSString stringWithFormat:@"(%@)", self.op];
+        return [NSString stringWithFormat:@"(%@)", [self.op description]];
     }
 }
 @end
@@ -545,7 +545,7 @@
     return [OYValue voidValue];
 }
 - (NSString *)description {
-    return [NSString stringWithFormat:@"(define %@ %@)", self.pattern, self.value];
+    return [NSString stringWithFormat:@"(define %@ %@)", [self.pattern description], [self.value description]];
 }
 @end
 
