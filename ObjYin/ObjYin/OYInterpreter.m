@@ -44,7 +44,7 @@ int interpreter_main(int argc, const char ** argv){
     }
     NSURL *URL = [NSURL URLWithString:argv1];
     OYInterpreter *i = [[OYInterpreter alloc] initWithContentOfURL:URL];
-    printf("%s", [[[i interpreteContentOfURL:URL] description] UTF8String]);
+    printf("%s\n", [[[i interpreteContentOfURL:URL] description] UTF8String]);
 
     return 0;
 }

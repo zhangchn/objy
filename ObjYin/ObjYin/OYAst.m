@@ -228,7 +228,7 @@
 
 - (NSString *)description {
     NSString *sep = _statements.count > 5 ? @"\n" : @" ";
-    return [NSString stringWithFormat:@"(sep%@%@)", sep, [_statements componentsJoinedByString:sep]];
+    return [NSString stringWithFormat:@"(seq%@%@)", sep, [_statements componentsJoinedByString:sep]];
 }
 @end
 
@@ -910,7 +910,13 @@ unsigned int ParseBinaryString(NSString *binaryString) {
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"(fun (%@) %@)", _params, _body];
+    NSMutableArray *paramsStrings = [NSMutableArray array];
+
+    [_params enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [paramsStrings addObject:[obj description]];
+    }];
+
+    return [NSString stringWithFormat:@"(fun ([%@]) %@)", [paramsStrings componentsJoinedByString:@" "], _body];
 }
 @end
 

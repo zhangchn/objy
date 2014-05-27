@@ -1,0 +1,6 @@
+(define funadd
+  (fun (x)
+    (fun (y)
+      (+ x y))))
+
+((funadd 3) 4)

@@ -48,6 +48,7 @@
 		DB4B01A3192C9721007DAE26 /* tommath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tommath.h; sourceTree = "<group>"; };
 		DB4B01A4192C9721007DAE26 /* tommath_class.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tommath_class.h; sourceTree = "<group>"; };
 		DB4B01A5192C9721007DAE26 /* tommath_superclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tommath_superclass.h; sourceTree = "<group>"; };
+		DB4B01BE19345A72007DAE26 /* curry1.yin */ = {isa = PBXFileReference; lastKnownFileType = text; name = curry1.yin; path = Tests/curry1.yin; sourceTree = SOURCE_ROOT; };
 		DB80905D1928C36B0024608C /* OYParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OYParser.h; sourceTree = "<group>"; };
 		DB80905E1928C36B0024608C /* OYParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OYParser.m; sourceTree = "<group>"; };
 		DB8090601928C8DD0024608C /* OYPreParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OYPreParser.h; sourceTree = "<group>"; };
@@ -114,6 +115,7 @@
 		DB4B01BC192E24C7007DAE26 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				DB4B01BE19345A72007DAE26 /* curry1.yin */,
 				DB4B0199192B2743007DAE26 /* array.yin */,
 				DB4B019A192B2743007DAE26 /* expr.yin */,
 				DB4B019B192B2743007DAE26 /* function1.yin */,

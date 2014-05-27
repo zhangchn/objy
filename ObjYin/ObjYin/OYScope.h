@@ -11,7 +11,7 @@
 @class OYType;
 @interface OYScope : NSObject <NSCopying>
 @property (nonatomic, strong) NSMutableDictionary *table;
-@property (nonatomic, weak) OYScope *parent;
+@property (nonatomic, strong) OYScope *parent;
 
 - (id)initWithParentScope:(OYScope *)parent;
 - (void)putAllFromScope:(OYScope *)anotherScope;
