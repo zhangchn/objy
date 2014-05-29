@@ -30,7 +30,7 @@
         program = parseURL(URL);
     }
     @catch (NSException *exception) {
-        NSLog(@"parsing error: %@", program);
+        NSLog(@"parsing error: %@", exception);
         return nil;
     }
     return [program interpretInScope:[OYScope initialScope]];

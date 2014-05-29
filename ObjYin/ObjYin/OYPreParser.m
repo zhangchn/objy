@@ -49,8 +49,6 @@
                 [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"unclosed closing delimeter: %@ does not close: %@", next, first] node:next] raise];
             } else {
                 [elements addObject:next];
-                next = [self nextNode1:depth + 1];
-
             }
         }
         return [[OYTuple alloc] initWithURL:first.URL elements:elements open:first close:next start:first.start end:next.end line:first.line column:first.col];
