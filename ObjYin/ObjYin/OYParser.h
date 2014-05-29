@@ -15,7 +15,6 @@ OYNode *parseNode(OYNode *prenode);
 NSMutableArray *parseList(NSArray *prenodes);
 NSMutableDictionary *parseMap(NSArray *prenodes);
 OYScope *parseProperties(NSArray *fields);
-OYNode *groupAttr(OYNode *prenodes);
 BOOL delimType(OYNode *c, NSString *d);
 //
 //@interface OYParser : NSObject

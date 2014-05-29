@@ -14,7 +14,7 @@
             true
             (even (- x 1))))))
 
-(even 10)  -- true
-(even 11)  -- false
-(odd 10)   -- false
-(odd 11)   -- true
+(print (even 10))                       -- true
+(print (even 11))                       -- false
+(print (odd 10))                        -- false
+(print (odd 11))                        -- true
