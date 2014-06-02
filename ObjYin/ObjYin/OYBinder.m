@@ -45,8 +45,6 @@ void define(OYNode *pattern, OYValue *value, OYScope *env) {
             NSArray *elms1 = ((OYVectorLiteral *)pattern).elements;
             NSArray *elms2 = ((NSArray *)value);
             
-//            List<Node> elms1 = ((VectorLiteral) pattern).elements;
-//            List<Value> elms2 = ((Vector) value).values;
             if (elms1.count == elms2.count) {
                 for (int i = 0; i < elms1.count; i++) {
                     define(elms1[i], elms2[i], env);
@@ -81,8 +79,6 @@ void assign(OYNode *pattern, OYValue *value, OYScope *env){
         if ([value isKindOfClass:[OYRecordType class]]) {
             NSDictionary *elms1 = ((OYRecordLiteral *)pattern).map;
             OYScope *elms2 = ((OYRecordType *)value).properties;
-//            Map<String, Node> elms1 = ((RecordLiteral) pattern).map;
-//            Scope elms2 = ((RecordType) value).properties;
             if ([[NSSet setWithArray:elms1.allKeys] isEqualToSet:elms2.keySet]) {
                 [elms1 enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                     assign(obj, [elms2 lookUpLocalName:key], env);
@@ -97,9 +93,6 @@ void assign(OYNode *pattern, OYValue *value, OYScope *env){
         if ([value isKindOfClass:[NSArray class]]) {
             NSArray *elms1 = ((OYVectorLiteral *)pattern).elements;
             NSArray *elms2 = ((NSArray *)value);
-            
-//            List<Node> elms1 = ((VectorLiteral) pattern).elements;
-//            List<Value> elms2 = ((Vector) value).values;
             
             if (elms1.count == elms2.count) {
                 for (int i = 0; i < elms2.count; i++) {

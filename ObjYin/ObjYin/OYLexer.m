@@ -95,7 +95,6 @@
         // detect runaway strings at end of file or at newline
         if (_offset >= _text.length || [_text characterAtIndex:_offset] == '\n') {
             [[[OYParserException alloc] initWithMessage:@"runaway string" line:startLine col:startCol start:_offset] raise];
-//            throw new ParserException("runaway string", startLine, startCol, offset);
         }
         
         // end of string
@@ -117,11 +116,9 @@
     }
     
     NSInteger end = _offset;
-    NSString *content = [_text substringWithRange:NSMakeRange(start + [@"\"" length], end - [@"\"" length] - start - [@"\"" length])];//(
-//                                    start + Constants.STRING_START.length(),
-//                                    end - Constants.STRING_END.length());
+    NSString *content = [_text substringWithRange:NSMakeRange(start + [@"\"" length], end - [@"\"" length] - start - [@"\"" length])];
+    
     return [[OYStr alloc] initWithURL:self.URL value:content start:start end:end line:startLine column:startCol];
-//    return new Str(content, file, start, end, startLine, startCol);
 }
 
 - (OYNode *)scanNumber {
@@ -135,17 +132,16 @@
     
     NSString *content = [_text substringWithRange:NSMakeRange(start, _offset - start)];
     
-    OYIntNum *intNum = [OYIntNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol];//(content, file, start, offset, startLine, startCol);
+    OYIntNum *intNum = [OYIntNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol];
     if (intNum) {
         return intNum;
     } else {
-        OYFloatNum *floatNum = [OYFloatNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol]; //.parse(content, file, start, offset, startLine, startCol);
+        OYFloatNum *floatNum = [OYFloatNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol];
         if (floatNum) {
             return floatNum;
         } else {
             NSString *message = [NSString stringWithFormat:@"incorrect number format: %@", content];
             [[[OYParserException alloc] initWithMessage:message line:startLine col:startCol start:start] raise];
-//            throw new ParserException("incorrect number format: " + content, startLine, startCol, start);
         }
         return nil;
     }
@@ -163,10 +159,8 @@
     NSString *content = [_text substringWithRange:NSMakeRange(start, _offset - start)];
     if ([content hasPrefix:@":"]) {
         return [[OYKeyword alloc] initWithURL:self.URL identifier:[content substringFromIndex:1] start:start end:_offset line:startLine column:startCol];
-//        return new Keyword(content.substring(1), file, start, offset, startLine, startCol);
     } else {
         return [[OYName alloc] initWithURL:self.URL identifier:content start:start end:_offset line:startLine column:startCol];
-//        return new Name(content, file, start, offset, startLine, startCol);
     }
 }
 
@@ -213,8 +207,6 @@
     // case 5. syntax error
     NSString *message = [NSString stringWithFormat:@"unrecognized syntax: %@", [_text substringWithRange:NSMakeRange(_offset, 1)]];
     [[[OYParserException alloc] initWithMessage:message line:_line col:_col start:_offset] raise];
-//    throw new ParserException("unrecognized syntax: " + text.substring(offset, offset + 1),
-//                              line, col, offset);
     return nil;
 }
 
@@ -230,7 +222,6 @@ BOOL isIdentifierChar(unichar c) {
         NSMutableCharacterSet *charSet = [NSMutableCharacterSet alphanumericCharacterSet];
         [charSet addCharactersInString:@"~!@#$%^&*-_=+|:;,<>?/"];
         identifierCharSet = charSet;
-//        identifierCharSet = [NSCharacterSet characterSetWithCharactersInString:@"~!@#$%^&*-_=+|:;,<>?/"];
     });
     return isalnum(c) || [identifierCharSet characterIsMember:c];
 }

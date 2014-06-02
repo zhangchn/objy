@@ -41,13 +41,7 @@ OYNode *parseNode(OYNode *prenode) {
         // default return the node untouched
         return prenode;
     }
-//    if ([prenode isKindOfClass:[OYTuple class]]) {
-//        OYTuple *tuple = (OYTuple *) prenode;
-//        NSMutableArray *elements = tuple.elements;
-//        
-//        if (delimType(tuple.open, @"{")) {
-//            return [[OYRecordLiteral alloc] initWithURL:tuple.URL contents:parseList(elements) start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
-//        }
+
     // following: actually do something
     OYTuple *tuple = (OYTuple *)prenode;
     NSMutableArray *elements = tuple.elements;
@@ -59,8 +53,6 @@ OYNode *parseNode(OYNode *prenode) {
     if (delimType(tuple.open, @"[")) {
         return [[OYVectorLiteral alloc] initWithURL:tuple.URL elements:parseList(elements) start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
     }
-
-//        OYNode *keyNode = elements[0];
 
     // (...) form must be non-empty
     if (!elements.count) {
@@ -267,23 +259,15 @@ OYScope *parseProperties(NSArray *fields) {
             NSString *identifier = ((OYName *) nameNode).identifier;
             if ([properties containsKey:identifier]) {
                 NSCAssert(0, @"%@\nduplicated field name: %@", nameNode, nameNode);
-//                _.abort(nameNode, "duplicated field name: " + nameNode);
             }
             
             OYNode *typeNode = elements[1];
             [properties setValue:typeNode forKey:@"type" inName:identifier];
-//            properties.put(id, "type", typeNode);
             
             NSMutableDictionary *props = parseMap([elements subarrayWithRange:NSMakeRange(2, elements.count - 2)]);
-//            Map<String, Node> props = parseMap(elements.subList(2, elements.count));
             NSMutableDictionary *propsObj = [NSMutableDictionary dictionaryWithDictionary:props];
             
-//            Map<String, Object> propsObj = new LinkedHashMap<>();
-//            for (Map.Entry<String, Node> e : props.entrySet()) {
-//                propsObj.put(e.getKey(), e.getValue());
-//            }
             [properties setValuesFromProperties:propsObj inName:((OYName *)nameNode).identifier];
-//            properties.putProperties(((OYName *) nameNode).identifier, propsObj);
         }
     }
     return properties;

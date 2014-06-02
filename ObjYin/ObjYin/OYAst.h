@@ -89,7 +89,6 @@
 + (OYScope *)typeCheckProperties:(OYScope *)unevaled inScope:(OYScope *)scope;
 + (void)mergeDefaultProperties:(OYScope *)properties scope:(OYScope *)scope;
 + (void)mergeTypeProperties:(OYScope *)properties scope:(OYScope *)s;
-//+ (OYScope *)evalProperties:(OYScope *)unevaled scope:(OYScope *)s;
 @end
 
 

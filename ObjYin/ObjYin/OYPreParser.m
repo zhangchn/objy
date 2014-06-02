@@ -16,8 +16,6 @@
     self = [super init];
     if (self) {
         _URL = URL;
-//        NSError *err;
-//        _text = [NSString stringWithContentsOfURL:URL encoding:NSUTF8StringEncoding error:&err];
         _lexer = [[OYLexer alloc] initWithURL:URL];
     }
     return self;
@@ -40,7 +38,6 @@
         for (next = [self nextNode1:depth + 1];
              ![OYDelimeter matchDelimeterOpen:first close:next];
              next = [self nextNode1:depth + 1]){
-//        while (![OYDelimeter matchDelimeterOpen:first close:next]) {
             if (!next) {
                 [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"unclosed delimeter till end of file: %@", first] node:first] raise];
                 
@@ -52,7 +49,6 @@
             }
         }
         return [[OYTuple alloc] initWithURL:first.URL elements:elements open:first close:next start:first.start end:next.end line:first.line column:first.col];
-//        return new Tuple(elements, first, next, first.file, first.start, next.end, first.line, first.col);
     } else if (depth == 0 && [OYDelimeter isCloseNode:first]) {
         [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"unmatched closing delimeter: %@ does not close any open delimeter", first] node:first] raise];
         return nil;
