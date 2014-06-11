@@ -260,15 +260,13 @@ NSMutableDictionary *parseMap(NSArray *prenodes) {
 OYScope *parseProperties(NSArray *fields) {
     OYScope *properties = [[OYScope alloc] init];
     for (OYNode *field in fields) {
-        if ([field isKindOfClass:[OYTuple class]] &&
-            delimType(((OYTuple *) field).open, @"["))
+        if (!([field isKindOfClass:[OYTuple class]] &&
+            delimType(((OYTuple *) field).open, @"[") &&
+              ((OYTuple *) field).elements.count >= 2))
         {
+            [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"incorrect form of descriptor: %@", field] node:field] raise];
+        } else {
             NSMutableArray *elements = parseList(((OYTuple *) field).elements);
-            if (elements.count < 2) {
-                NSString *message = [NSString stringWithFormat:@"incorrect form of descriptor: %@", field];
-                [[[OYParserException alloc] initWithMessage:message node:field] raise];
-            }
-            
             OYNode *nameNode = elements[0];
             if (!([nameNode isKindOfClass:[OYName class]])) {
                 [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"expect field name, but got: %@", nameNode] node:nameNode] raise];
@@ -280,14 +278,15 @@ OYScope *parseProperties(NSArray *fields) {
             
             OYNode *typeNode = elements[1];
             [properties setValue:typeNode forKey:@"type" inName:identifier];
-            
+            if (![typeNode isKindOfClass:[OYName class]]) {
+                [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"type must be a name, but got: %@", typeNode] node:typeNode] raise];
+            }
+
+            [properties setValue:typeNode forKey:@"type" inName:identifier];
+
             NSMutableDictionary *props = parseMap([elements subarrayWithRange:NSMakeRange(2, elements.count - 2)]);
             NSMutableDictionary *propsObj = [NSMutableDictionary dictionaryWithDictionary:props];
-            
             [properties setValuesFromProperties:propsObj inName:((OYName *)nameNode).identifier];
-        } else {
-            NSString *message = [NSString stringWithFormat:@"incorrect form of descriptor: %@", field];
-            [[[OYParserException alloc] initWithMessage:message node:field] raise];
         }
     }
     return properties;
