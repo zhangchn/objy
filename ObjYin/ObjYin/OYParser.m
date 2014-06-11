@@ -46,10 +46,6 @@ OYNode *parseNode(OYNode *prenode) {
     OYTuple *tuple = (OYTuple *)prenode;
     NSMutableArray *elements = tuple.elements;
 
-    if (delimType(tuple.open, @"{")) {
-        return [[OYRecordLiteral alloc] initWithURL:tuple.URL contents:parseList(elements) start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
-    }
-
     if (delimType(tuple.open, @"[")) {
         return [[OYVectorLiteral alloc] initWithURL:tuple.URL elements:parseList(elements) start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
     }
