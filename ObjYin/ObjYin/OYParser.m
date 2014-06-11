@@ -267,23 +267,15 @@ OYScope *parseProperties(NSArray *fields) {
             NSString *identifier = ((OYName *) nameNode).identifier;
             if ([properties containsKey:identifier]) {
                 NSCAssert(0, @"%@\nduplicated field name: %@", nameNode, nameNode);
-//                _.abort(nameNode, "duplicated field name: " + nameNode);
             }
             
             OYNode *typeNode = elements[1];
             [properties setValue:typeNode forKey:@"type" inName:identifier];
-//            properties.put(id, "type", typeNode);
-            
+
             NSMutableDictionary *props = parseMap([elements subarrayWithRange:NSMakeRange(2, elements.count - 2)]);
-//            Map<String, Node> props = parseMap(elements.subList(2, elements.count));
             NSMutableDictionary *propsObj = [NSMutableDictionary dictionaryWithDictionary:props];
             
-//            Map<String, Object> propsObj = new LinkedHashMap<>();
-//            for (Map.Entry<String, Node> e : props.entrySet()) {
-//                propsObj.put(e.getKey(), e.getValue());
-//            }
             [properties setValuesFromProperties:propsObj inName:((OYName *)nameNode).identifier];
-//            properties.putProperties(((OYName *) nameNode).identifier, propsObj);
         }
     }
     return properties;
