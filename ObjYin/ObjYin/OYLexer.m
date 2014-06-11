@@ -24,7 +24,6 @@
             NSAssert(0, @"failed to read file: %@", URL);
         }
         [OYDelimeter addDelimiterPairOpen:@"(" close:@")"];
-        [OYDelimeter addDelimiterPairOpen:@"{" close:@"}"];
         [OYDelimeter addDelimiterPairOpen:@"[" close:@"]"];
         [OYDelimeter addDelimiter:@"."];
     }

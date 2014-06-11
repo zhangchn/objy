@@ -1034,7 +1034,7 @@ unsigned int ParseBinaryString(NSString *binaryString) {
     [self.map enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [descComp addObject:[NSString stringWithFormat:@":%@ %@", key, obj]];
     }];
-    return [NSString stringWithFormat:@"{%@}", [descComp componentsJoinedByString:@" "]];
+    return [NSString stringWithFormat:@"[%@]", [descComp componentsJoinedByString:@" "]];
 }
 
 @end
