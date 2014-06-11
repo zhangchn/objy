@@ -22,185 +22,210 @@ OYNode *parseURL(NSURL *URL) {
 
 OYNode *parseNode(OYNode *prenode) {
     
-    // initial program is in a block
-    if ([prenode isKindOfClass:[OYBlock class]]) {
-        NSMutableArray *parsed = parseList(((OYBlock *) prenode).statements);
-        return [[OYBlock alloc] initWithURL:prenode.URL statements:parsed start:prenode.start end:prenode.end line:prenode.line column:prenode.col];
-    }
-        
-    // most structures are encoded in a tuple
-    // (if t c a) (+ 1 2) (f x y) ...
-    // decode them by their first map
-
     if (!([prenode isKindOfClass:[OYTuple class]])) {
-        // default return the node untouched
+        // Case 1: node is not of form (..) or [..], return the node itself
         return prenode;
-    }
+    } else {
 
-    // following: actually do something
-    OYTuple *tuple = (OYTuple *)prenode;
+        // Case 2: node is of form (..) or [..]
+        OYTuple *tuple = (OYTuple *)prenode;
+        NSMutableArray *elements = tuple.elements;
+
+        if (delimType(tuple.open, @"[")) {
+            // Case 2.1: node is of form [..]
+            return [[OYVectorLiteral alloc] initWithURL:tuple.URL elements:parseList(elements) start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
+        } else {
+            // Case 2.2: node is (..)
+            if (!elements.count) {
+                [[[OYParserException alloc] initWithMessage:@"syntax error" node:tuple] raise];
+                return nil;
+            } else {
+                // Case 2.2.2: node is of form (keyword ..)
+                OYNode *keyNode = elements[0];
+
+                if ([keyNode isKindOfClass:[OYName class]]) {
+                    NSString *identifier = ((OYName *)keyNode).identifier;
+                    if ([identifier isEqualToString:@"seq"]) {
+                        return parseBlock(tuple);
+                    } else if ([identifier isEqualToString:@"if"]) {
+                        return parseIf(tuple);
+                    } else if ([identifier isEqualToString:@"def"]) {
+                        return parseDef(tuple);
+                    } else if ([identifier isEqualToString:@"set!"]) {
+                        return parseAssign(tuple);
+                    } else if ([identifier isEqualToString:@"declare"]) {
+                        return parseDeclare(tuple);
+                    } else if ([identifier isEqualToString:@"fun"]) {
+                        return parseFun(tuple);
+                    } else if ([identifier isEqualToString:@"record"]) {
+                        return parseRecordDef(tuple);
+                    } else {
+                        return parseCall(tuple);
+                    }
+                } else {
+                    // applications whose operator is not a name
+                    // e.g. ((foo 1) 2)
+                    return parseCall(tuple);
+                }
+            }
+        }
+    }
+}
+
+OYBlock *parseBlock(OYTuple *tuple) {
+    NSMutableArray *elements = tuple.elements;
+    NSMutableArray *statements = parseList([elements subarrayWithRange:NSMakeRange(1, elements.count - 1)]);
+    [[[OYParserException alloc] initWithMessage:@"syntax error" node:tuple] raise];
+    return [[OYBlock alloc] initWithURL:tuple.URL statements:statements start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
+}
+
+OYIf *parseIf(OYTuple *tuple){
+    NSMutableArray *elements = tuple.elements;
+    if (elements.count != 4) {
+        [[[OYParserException alloc] initWithMessage:@"incorrect format of if" node:tuple] raise];
+    }
+    OYNode *test = parseNode(elements[1]);
+    OYNode *conseq = parseNode(elements[2]);
+    OYNode *alter = parseNode(elements[3]);
+    return [[OYIf alloc] initWithURL:tuple.URL test:test then:conseq orelse:alter start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
+}
+
+OYDef *parseDef(OYTuple *tuple) {
+    NSMutableArray *elements = tuple.elements;
+    if (elements.count != 3) {
+        [[[OYParserException alloc] initWithMessage:@"incorrect format of definition" node:tuple] raise];
+    }
+    OYNode *pattern = parseNode(elements[1]);
+    OYNode *value = parseNode(elements[2]);
+    return [[OYDef alloc] initWithURL:tuple.URL pattern:pattern value:value start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
+}
+
+OYAssign *parseAssign(OYTuple *tuple) {
+    NSMutableArray *elements = tuple.elements;
+    if (elements.count != 3) {
+        [[[OYParserException alloc] initWithMessage:@"incorrect format of assignment" node:tuple] raise];
+    }
+    OYNode *pattern = parseNode(elements[1]);
+    OYNode *value = parseNode(elements[2]);
+    return [[OYAssign alloc] initWithURL:tuple.URL pattern:pattern value:value start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
+}
+
+OYDeclare *parseDeclare(OYTuple *tuple) {
     NSMutableArray *elements = tuple.elements;
 
-    if (delimType(tuple.open, @"[")) {
-        return [[OYVectorLiteral alloc] initWithURL:tuple.URL elements:parseList(elements) start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
+    if (elements.count < 2) {
+        [[[OYParserException alloc] initWithMessage:@"syntax error in record type definition" node:tuple] raise];
+    }
+    OYScope *properties = parseProperties([elements subarrayWithRange:NSMakeRange(1, elements.count - 1)]);
+    return [[OYDeclare alloc] initWithURL:tuple.URL propertyForm:properties start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
+
+}
+
+OYFun *parseFun(OYTuple *tuple) {
+    NSMutableArray *elements = tuple.elements;
+    if (elements.count < 3) {
+        [[[OYParserException alloc] initWithMessage:@"syntax error in function definition" node:tuple] raise];
     }
 
-    // (...) form must be non-empty
-    if (!elements.count) {
-        [[[OYParserException alloc] initWithMessage:@"syntax error" node:tuple] raise];
+    // construct parameter list
+    OYNode *preParams = elements[1];
+    if (!([preParams isKindOfClass:[OYTuple class]])) {
+        [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"incorrect format of parameters: %@", preParams] node:preParams] raise];
     }
 
-    OYNode *keyNode = elements[0];
+    // parse the parameters, test whether it's all names or all tuples
+    __block BOOL hasName = NO;
+    __block BOOL hasTuple = NO;
+    NSMutableArray *paramNames = [NSMutableArray new];
+    NSMutableArray *paramTuples = [NSMutableArray new];
+    [((OYTuple *) preParams).elements enumerateObjectsUsingBlock:^(OYNode *p, NSUInteger idx, BOOL *stop) {
+        if ([p isKindOfClass:[OYName class]]) {
+            hasName = true;
+            [paramNames addObject:p];
+        } else if ([p isKindOfClass:[OYTuple class]]) {
+            hasTuple = true;
+            NSMutableArray *argElements = ((OYTuple *) p).elements;
+            if (argElements.count == 0) {
+                [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"illegal argument format: %@", p] node:p] raise];
+            }
+            if (!([argElements[0] isKindOfClass:[OYName class]])) {
+                [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"illegal argument name : %@", argElements[0]] node:p] raise];
+            }
 
-    if ([keyNode isKindOfClass:[OYName class]]) {
-        NSString *keyword = ((OYName *) keyNode).identifier;
-        // -------------------- sequence --------------------
-        if ([keyword isEqualToString:@"seq"]) {
-            NSMutableArray *statements = parseList([elements subarrayWithRange:NSMakeRange(1, elements.count - 1)]);
-            return [[OYBlock alloc] initWithURL:prenode.URL statements:statements start:prenode.start end:prenode.end line:prenode.line column:prenode.col];
+            OYName *name = (OYName *) argElements[0];
+            if (![name.identifier isEqualToString:@"->"]) {
+                [paramNames addObject:name];
+            }
+            [paramTuples addObject:p];
         }
-        // -------------------- if --------------------
-        if ([keyword isEqualToString:@"if"]) {
-            if (elements.count != 4) {
-                [[[OYParserException alloc] initWithMessage:@"incorrect format of if" node:tuple] raise];
-            }
-            OYNode *test = parseNode(elements[1]);
-            OYNode *conseq = parseNode(elements[2]);
-            OYNode *alter = parseNode(elements[3]);
-            return [[OYIf alloc] initWithURL:prenode.URL test:test then:conseq orelse:alter start:prenode.start end:prenode.end line:prenode.line column:prenode.col];
-        }
-        // -------------------- definition --------------------
-        if ([keyword isEqualToString:@"define"]) {
-            if (elements.count != 3) {
-                [[[OYParserException alloc] initWithMessage:@"incorrect format of definition" node:tuple] raise];
-            }
-            OYNode *pattern = parseNode(elements[1]);
-            OYNode *value = parseNode(elements[2]);
-            return [[OYDef alloc] initWithURL:prenode.URL pattern:pattern value:value start:prenode.start end:prenode.end line:prenode.line column:prenode.col];
+    }];
 
-        }
-        // -------------------- assignment --------------------
-        if ([keyword isEqualToString:(@"set!")]) {
-            if (elements.count != 3) {
-                [[[OYParserException alloc] initWithMessage:@"incorrect format of assignment" node:tuple] raise];
-            }
-            OYNode *pattern = parseNode(elements[1]);
-            OYNode *value = parseNode(elements[2]);
-            return [[OYAssign alloc] initWithURL:prenode.URL pattern:pattern value:value start:prenode.start end:prenode.end line:prenode.line column:prenode.col];
-        }
-
-        // -------------------- declare --------------------
-        if ([keyword isEqualToString:@"declare"]) {
-            if (elements.count < 2) {
-                [[[OYParserException alloc] initWithMessage:@"syntax error in record type definition" node:tuple] raise];
-            }
-            OYScope *properties = parseProperties([elements subarrayWithRange:NSMakeRange(1, elements.count - 1)]);
-            return [[OYDeclare alloc] initWithURL:prenode.URL propertyForm:properties start:prenode.start end:prenode.end line:prenode.line column:prenode.col];
-        }
-        // -------------------- anonymous function --------------------
-        if ([keyword isEqualToString:@"fun"]) {
-            if (elements.count < 3) {
-                [[[OYParserException alloc] initWithMessage:@"syntax error in function definition" node:tuple] raise];
-            }
-
-            // construct parameter list
-            OYNode *preParams = elements[1];
-            if (!([preParams isKindOfClass:[OYTuple class]])) {
-                [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"incorrect format of parameters: %@", preParams] node:preParams] raise];
-            }
-
-            // parse the parameters, test whether it's all names or all tuples
-            __block BOOL hasName = NO;
-            __block BOOL hasTuple = NO;
-            NSMutableArray *paramNames = [NSMutableArray new];
-            NSMutableArray *paramTuples = [NSMutableArray new];
-            [((OYTuple *) preParams).elements enumerateObjectsUsingBlock:^(OYNode *p, NSUInteger idx, BOOL *stop) {
-                if ([p isKindOfClass:[OYName class]]) {
-                    hasName = true;
-                    [paramNames addObject:p];
-                } else if ([p isKindOfClass:[OYTuple class]]) {
-                    hasTuple = true;
-                    NSMutableArray *argElements = ((OYTuple *) p).elements;
-                    if (argElements.count == 0) {
-                        [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"illegal argument format: %@", p] node:p] raise];
-                    }
-                    if (!([argElements[0] isKindOfClass:[OYName class]])) {
-                        [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"illegal argument name : %@", argElements[0]] node:p] raise];
-                    }
-
-                    OYName *name = (OYName *) argElements[0];
-                    if (![name.identifier isEqualToString:@"->"]) {
-                        [paramNames addObject:name];
-                    }
-                    [paramTuples addObject:p];
-                }
-            }];
-
-            if (hasName && hasTuple) {
-                [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"parameters must be either all names or all tuples: %@", preParams] node:preParams] raise];
-            }
-
-            OYScope *properties;
-            if (hasTuple) {
-                properties = parseProperties(paramTuples);
-            } else {
-                properties = nil;
-            }
-
-            // construct body
-            NSMutableArray *statements = parseList([elements subarrayWithRange:NSMakeRange(2, elements.count - 2)]);
-            NSInteger start = [(OYNode *)statements[0] start];
-            NSInteger end = [(OYNode *)statements[statements.count - 1] end];
-            OYNode *body = [[OYBlock alloc] initWithURL:prenode.URL statements:statements start:start end:end line:prenode.line column:prenode.col];
-
-            return [[OYFun alloc] initWithURL:prenode.URL params:paramNames propertyForm:properties body:body start:prenode.start end:prenode.end line:prenode.line column:prenode.col];
-        }
-        // -------------------- record type definition --------------------
-        if ([keyword isEqualToString:@"record"]) {
-            if (elements.count < 2) {
-                [[[OYParserException alloc] initWithMessage:@"syntax error in record type definition" node:tuple] raise];
-            }
-
-            OYNode *name = elements[1];
-            OYNode *maybeParents = elements[2];
-
-            NSMutableArray *parents;
-            NSArray *fields;
-
-            if (!([name isKindOfClass:[OYName class]])) {
-                [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"syntax error in record name: %@", name] node:name] raise];
-            }
-
-            // check if there are parents (record A (B C) ...)
-            if ([maybeParents isKindOfClass:[OYTuple class]] &&
-
-                delimType(((OYTuple *) maybeParents).open, @"("))
-            {
-                NSMutableArray *parentNodes = ((OYTuple *) maybeParents).elements;
-                parents = [NSMutableArray new];
-                for (OYNode *p in parentNodes) {
-                    if (!([p isKindOfClass:[OYName class]])) {
-                        [[[OYParserException alloc] initWithMessage:@"%@\nparents can only be names" node:p] raise];
-                    }
-                    [parents addObject:p];
-                }
-                fields = [elements subarrayWithRange:NSMakeRange(3, elements.count - 3)];
-            } else {
-                parents = nil;
-                fields = [elements subarrayWithRange:NSMakeRange(2, elements.count - 2)];
-            }
-
-            OYScope *properties = parseProperties(fields);
-            return [[OYRecordDef alloc] initWithURL:prenode.URL name:(OYName *)name parents:parents propertyForm:properties start:prenode.start end:prenode.end line:prenode.line column:prenode.col];
-        }
+    if (hasName && hasTuple) {
+        [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"parameters must be either all names or all tuples: %@", preParams] node:preParams] raise];
     }
 
-    // -------------------- application --------------------
-    // must go after others because it has no keywords
+    OYScope *properties;
+    if (hasTuple) {
+        properties = parseProperties(paramTuples);
+    } else {
+        properties = nil;
+    }
+
+    // construct body
+    NSMutableArray *statements = parseList([elements subarrayWithRange:NSMakeRange(2, elements.count - 2)]);
+    NSInteger start = [(OYNode *)statements[0] start];
+    NSInteger end = [(OYNode *)statements[statements.count - 1] end];
+    OYNode *body = [[OYBlock alloc] initWithURL:tuple.URL statements:statements start:start end:end line:tuple.line column:tuple.col];
+
+    return [[OYFun alloc] initWithURL:tuple.URL params:paramNames propertyForm:properties body:body start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
+
+}
+
+OYRecordDef *parseRecordDef(OYTuple *tuple) {
+    NSMutableArray *elements = tuple.elements;
+    if (elements.count < 2) {
+        [[[OYParserException alloc] initWithMessage:@"syntax error in record type definition" node:tuple] raise];
+    }
+
+    OYNode *name = elements[1];
+    OYNode *maybeParents = elements[2];
+
+    NSMutableArray *parents;
+    NSArray *fields;
+
+    if (!([name isKindOfClass:[OYName class]])) {
+        [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"syntax error in record name: %@", name] node:name] raise];
+    }
+
+    // check if there are parents (record A (B C) ...)
+    if ([maybeParents isKindOfClass:[OYTuple class]] &&
+
+        delimType(((OYTuple *) maybeParents).open, @"("))
+    {
+        NSMutableArray *parentNodes = ((OYTuple *) maybeParents).elements;
+        parents = [NSMutableArray new];
+        for (OYNode *p in parentNodes) {
+            if (!([p isKindOfClass:[OYName class]])) {
+                [[[OYParserException alloc] initWithMessage:@"parents can only be names" node:p] raise];
+            }
+            [parents addObject:p];
+        }
+        fields = [elements subarrayWithRange:NSMakeRange(3, elements.count - 3)];
+    } else {
+        parents = nil;
+        fields = [elements subarrayWithRange:NSMakeRange(2, elements.count - 2)];
+    }
+
+    OYScope *properties = parseProperties(fields);
+    return [[OYRecordDef alloc] initWithURL:tuple.URL name:(OYName *)name parents:parents propertyForm:properties start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
+}
+
+OYCall *parseCall(OYTuple *tuple) {
+    NSMutableArray *elements = tuple.elements;
     OYNode *func = parseNode(elements[0]);
     NSMutableArray *parsedArgs = parseList([elements subarrayWithRange:NSMakeRange(1, elements.count - 1)]);
-    OYArgument *args = [[OYArgument alloc] initWithElements:parsedArgs];//new Argument(parsedArgs);
-    return [[OYCall alloc] initWithURL:prenode.URL op:func arguments:args start:prenode.start end:prenode.end line:prenode.line column:prenode.col];
+    OYArgument *args = [[OYArgument alloc] initWithElements:parsedArgs];
+    return [[OYCall alloc] initWithURL:tuple.URL op:func arguments:args start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
 }
 
 
@@ -240,7 +265,8 @@ OYScope *parseProperties(NSArray *fields) {
         {
             NSMutableArray *elements = parseList(((OYTuple *) field).elements);
             if (elements.count < 2) {
-                [[[OYParserException alloc] initWithMessage:@"empty record slot not allowed" node:field] raise];
+                NSString *message = [NSString stringWithFormat:@"incorrect form of descriptor: %@", field];
+                [[[OYParserException alloc] initWithMessage:message node:field] raise];
             }
             
             OYNode *nameNode = elements[0];
@@ -249,7 +275,7 @@ OYScope *parseProperties(NSArray *fields) {
             }
             NSString *identifier = ((OYName *) nameNode).identifier;
             if ([properties containsKey:identifier]) {
-                NSCAssert(0, @"%@\nduplicated field name: %@", nameNode, nameNode);
+                [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"duplicated name: %@", nameNode] node:nameNode] raise];
             }
             
             OYNode *typeNode = elements[1];
@@ -259,6 +285,9 @@ OYScope *parseProperties(NSArray *fields) {
             NSMutableDictionary *propsObj = [NSMutableDictionary dictionaryWithDictionary:props];
             
             [properties setValuesFromProperties:propsObj inName:((OYName *)nameNode).identifier];
+        } else {
+            NSString *message = [NSString stringWithFormat:@"incorrect form of descriptor: %@", field];
+            [[[OYParserException alloc] initWithMessage:message node:field] raise];
         }
     }
     return properties;

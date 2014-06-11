@@ -955,7 +955,6 @@ unsigned int ParseBinaryString(NSString *binaryString) {
                 return nil;
             }
             OYScope *parentProps = ((OYRecordType *)pv).properties;
-//            [parentProps.keySet enumerateObjectsUsingBlock:^(NSString *key, BOOL *stop) {
             for (NSString *key in parentProps.keySet) {
                 OYValue *existing = [properties lookUpLocalTypeName:key];
                 if (existing) {
@@ -976,11 +975,11 @@ unsigned int ParseBinaryString(NSString *binaryString) {
     NSMutableString *listDescription = [NSMutableString new];
     for (NSString *field in self.propertyForm.keySet) {
         [[self.propertyForm lookUpAllPropsName:field] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            [listDescription appendFormat:@" :%@ %@", key, obj];
+            [listDescription appendFormat:@"%@ :%@ %@", field, key, obj];
         }];
     }
 
-    return [NSString stringWithFormat:@"(record %@ %@%@", self.name, self.parents ? [NSString stringWithFormat:@" (%@)", [OYNode descriptionForNodes:self.parents]] : @"", listDescription];
+    return [NSString stringWithFormat:@"(record %@ %@ [%@])", self.name, self.parents ? [NSString stringWithFormat:@" (%@)", [OYNode descriptionForNodes:self.parents]] : @"", listDescription];
 }
 @end
 
