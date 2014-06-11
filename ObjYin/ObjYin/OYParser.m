@@ -263,7 +263,7 @@ OYScope *parseProperties(NSArray *fields) {
             
             OYNode *typeNode = elements[1];
             [properties setValue:typeNode forKey:@"type" inName:identifier];
-
+            
             NSMutableDictionary *props = parseMap([elements subarrayWithRange:NSMakeRange(2, elements.count - 2)]);
             NSMutableDictionary *propsObj = [NSMutableDictionary dictionaryWithDictionary:props];
             
