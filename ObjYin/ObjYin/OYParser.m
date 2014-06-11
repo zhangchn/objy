@@ -41,13 +41,7 @@ OYNode *parseNode(OYNode *prenode) {
         // default return the node untouched
         return prenode;
     }
-//    if ([prenode isKindOfClass:[OYTuple class]]) {
-//        OYTuple *tuple = (OYTuple *) prenode;
-//        NSMutableArray *elements = tuple.elements;
-//        
-//        if (delimType(tuple.open, @"{")) {
-//            return [[OYRecordLiteral alloc] initWithURL:tuple.URL contents:parseList(elements) start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
-//        }
+
     // following: actually do something
     OYTuple *tuple = (OYTuple *)prenode;
     NSMutableArray *elements = tuple.elements;
@@ -59,8 +53,6 @@ OYNode *parseNode(OYNode *prenode) {
     if (delimType(tuple.open, @"[")) {
         return [[OYVectorLiteral alloc] initWithURL:tuple.URL elements:parseList(elements) start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
     }
-
-//        OYNode *keyNode = elements[0];
 
     // (...) form must be non-empty
     if (!elements.count) {

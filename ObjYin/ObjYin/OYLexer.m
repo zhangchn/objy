@@ -131,11 +131,11 @@
     
     NSString *content = [_text substringWithRange:NSMakeRange(start, _offset - start)];
     
-    OYIntNum *intNum = [OYIntNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol];//(content, file, start, offset, startLine, startCol);
+    OYIntNum *intNum = [OYIntNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol];
     if (intNum) {
         return intNum;
     } else {
-        OYFloatNum *floatNum = [OYFloatNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol]; //.parse(content, file, start, offset, startLine, startCol);
+        OYFloatNum *floatNum = [OYFloatNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol];
         if (floatNum) {
             return floatNum;
         } else {
