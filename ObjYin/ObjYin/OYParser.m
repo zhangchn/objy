@@ -27,12 +27,7 @@ OYNode *parseNode(OYNode *prenode) {
         NSMutableArray *parsed = parseList(((OYBlock *) prenode).statements);
         return [[OYBlock alloc] initWithURL:prenode.URL statements:parsed start:prenode.start end:prenode.end line:prenode.line column:prenode.col];
     }
-    
-    if ([prenode isKindOfClass:[OYAttr class]]) {
-        OYAttr *a = (OYAttr *)prenode;
-        return [[OYAttr alloc] initWithURL:a.URL value:parseNode(a.value) attr:a.attr start:a.start end:a.end line:a.line column:a.col]; //Attr(parseNode(a.value), a.attr, a.file, a.start, a.end, a.line, a.col);
-    }
-    
+        
     // most structures are encoded in a tuple
     // (if t c a) (+ 1 2) (f x y) ...
     // decode them by their first map
