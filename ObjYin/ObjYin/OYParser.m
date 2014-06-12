@@ -49,7 +49,7 @@ OYNode *parseNode(OYNode *prenode) {
                         return parseBlock(tuple);
                     } else if ([identifier isEqualToString:@"if"]) {
                         return parseIf(tuple);
-                    } else if ([identifier isEqualToString:@"def"]) {
+                    } else if ([identifier isEqualToString:@"define"]) {
                         return parseDef(tuple);
                     } else if ([identifier isEqualToString:@"set!"]) {
                         return parseAssign(tuple);
@@ -75,7 +75,7 @@ OYNode *parseNode(OYNode *prenode) {
 OYBlock *parseBlock(OYTuple *tuple) {
     NSMutableArray *elements = tuple.elements;
     NSMutableArray *statements = parseList([elements subarrayWithRange:NSMakeRange(1, elements.count - 1)]);
-    [[[OYParserException alloc] initWithMessage:@"syntax error" node:tuple] raise];
+//    [[[OYParserException alloc] initWithMessage:@"syntax error" node:tuple] raise];
     return [[OYBlock alloc] initWithURL:tuple.URL statements:statements start:tuple.start end:tuple.end line:tuple.line column:tuple.col];
 }
 
