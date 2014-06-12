@@ -41,6 +41,17 @@ int interpreter_main(int argc, const char ** argv){
     NSString *argv1 = nil;
     if (argc > 1) {
         argv1 = [NSString stringWithCString:argv[1] encoding:NSUTF8StringEncoding];
+        if (!([argv1 hasPrefix:@"file://"] || [argv1 hasPrefix:@"http://"])) {
+            NSFileManager *fm = [NSFileManager new];
+            if ([argv1 hasPrefix:@"./"]) {
+                argv1 = [[fm currentDirectoryPath] stringByAppendingPathComponent:[argv1 substringFromIndex:2]];
+            } else if ([argv1 hasPrefix:@"~/"]) {
+                argv1 = [NSHomeDirectory() stringByAppendingPathComponent:[argv1 substringFromIndex:2]];
+            } else if (![argv1 hasPrefix:@"/"]) {
+                argv1 = [[fm currentDirectoryPath] stringByAppendingPathComponent:argv1];
+            }
+            argv1 = [@"file://" stringByAppendingString:argv1];
+        }
     }
     NSURL *URL = [NSURL URLWithString:argv1];
     OYInterpreter *i = [[OYInterpreter alloc] initWithContentOfURL:URL];
