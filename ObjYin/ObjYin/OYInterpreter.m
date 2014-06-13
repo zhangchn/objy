@@ -30,7 +30,8 @@
         program = parseURL(URL);
     }
     @catch (NSException *exception) {
-        NSLog(@"parsing error: %@", exception);
+        fprintf(stderr, "parsing error: %s\n", exception.description.UTF8String);
+        fprintf(stderr, "%s\n", [[exception.callStackSymbols componentsJoinedByString:@"\n"] UTF8String]);
         return nil;
     }
     return [program interpretInScope:[OYScope initialScope]];
