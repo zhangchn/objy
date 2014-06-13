@@ -19,7 +19,7 @@ C funtions and (singleton) class methods were used to emulate the public static 
 
 In some APIs, orders of parameters were changed to fit in the naming convetion of Cocoa, more or less.
 
-`NSURL` was used to replace `file` parameters all around, so the first and only supported command-line parameter of interpreter should be prepended with 'file://' before any path. 'http' protocol was not tested but is likely to work.
+`NSURL` was used to replace `file` parameters internally, as `NSURL`s are the recommended representation of paths for Mac OS X. The first and only supported command-line parameter of interpreter should be either a raw path or a path prepended with 'file://' before any path. `http` and `https` protocols were not tested but are likely to work.
 
 Constants in Constants.java were replaced directly with string literals just in place.
 
@@ -42,3 +42,7 @@ More targets (typechecker, parser, etc.) are missing for now.
 GNU AGPLv3 license: I do not personally favor GNU licenses and am too lazy to add one, feel free to add if you need to.
 
 This is a weekend-project, do not expect too much, after all.
+
+### To-do
+
+Perhaps a Swift port?
