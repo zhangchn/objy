@@ -44,11 +44,16 @@ int interpreter_main(int argc, const char ** argv){
         if (!([argv1 hasPrefix:@"file://"] || [argv1 hasPrefix:@"http://"])) {
             NSFileManager *fm = [NSFileManager new];
             if ([argv1 hasPrefix:@"./"]) {
-                argv1 = [[fm currentDirectoryPath] stringByAppendingPathComponent:[argv1 substringFromIndex:2]];
+                argv1 = [[[fm currentDirectoryPath] stringByAppendingPathComponent:[argv1 substringFromIndex:2]] stringByStandardizingPath];
+            } else if ([argv1 hasPrefix:@"../"]) {
+                argv1 = [[[fm currentDirectoryPath] stringByAppendingPathComponent:argv1] stringByStandardizingPath];
             } else if ([argv1 hasPrefix:@"~/"]) {
-                argv1 = [NSHomeDirectory() stringByAppendingPathComponent:[argv1 substringFromIndex:2]];
+                argv1 = [argv1 stringByStandardizingPath];
             } else if (![argv1 hasPrefix:@"/"]) {
-                argv1 = [[fm currentDirectoryPath] stringByAppendingPathComponent:argv1];
+                argv1 = [[fm currentDirectoryPath] stringByAppendingPathComponent:[argv1 stringByStandardizingPath]];
+            } else {
+                // string starts with "/"
+                argv1 = [argv1 stringByStandardizingPath];
             }
             argv1 = [@"file://" stringByAppendingString:argv1];
         }
