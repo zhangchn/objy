@@ -596,10 +596,10 @@
 + (BOOL)isDelimiter:(unichar)c {
     return [[OYDelimeter delims] containsObject:([NSString stringWithCharacters:&c length:1])];
 }
-+ (BOOL)isOpenNode:(OYNode *)node {
++ (BOOL)isOpenDelimeter:(OYNode *)node {
     return ([node isKindOfClass:[OYDelimeter class]]) && [[[OYDelimeter delimMap] allKeys] containsObject:((OYDelimeter *)node).shape];
 }
-+ (BOOL)isCloseNode:(OYNode *)node {
++ (BOOL)isCloseDelimeter:(OYNode *)node {
     return ([node isKindOfClass:[OYDelimeter class]]) && [[[OYDelimeter delimMap] allValues] containsObject:((OYDelimeter *)node).shape];
 }
 + (BOOL)matchDelimeterOpen:(OYNode *)open close:(OYNode *)close {

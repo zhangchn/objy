@@ -106,8 +106,8 @@
 + (void)addDelimiterPairOpen:(NSString *)open close:(NSString *)close;
 + (void)addDelimiter:(NSString *)delim;
 + (BOOL)isDelimiter:(unichar)c;
-+ (BOOL)isOpenNode:(OYNode *)node;
-+ (BOOL)isCloseNode:(OYNode *)node;
++ (BOOL)isOpenDelimeter:(OYNode *)node;
++ (BOOL)isCloseDelimeter:(OYNode *)node;
 + (BOOL)matchDelimeterOpen:(OYNode *)open close:(OYNode *)close;
 + (NSMutableSet *)delims;
 + (NSMutableDictionary *)delimMap;

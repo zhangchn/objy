@@ -32,16 +32,16 @@
         return nil;
     }
     
-    if ([OYDelimeter isOpenNode:first]) {   // try to get matched (...)
+    if ([OYDelimeter isOpenDelimeter:first]) {   // try to get matched (...)
         NSMutableArray *elements = [NSMutableArray new];
         OYNode *next;
         for (next = [self nextNode1:depth + 1];
              ![OYDelimeter matchDelimeterOpen:first close:next];
-             next = [self nextNode1:depth + 1]){
+             next = [self nextNode1:depth + 1]) {
             if (!next) {
                 [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"unclosed delimeter till end of file: %@", first] node:first] raise];
                 
-            } else if ([OYDelimeter isCloseNode:next]) {
+            } else if ([OYDelimeter isCloseDelimeter:next]) {
                 
                 [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"unclosed closing delimeter: %@ does not close: %@", next, first] node:next] raise];
             } else {
@@ -49,7 +49,7 @@
             }
         }
         return [[OYTuple alloc] initWithURL:first.URL elements:elements open:first close:next start:first.start end:next.end line:first.line column:first.col];
-    } else if (depth == 0 && [OYDelimeter isCloseNode:first]) {
+    } else if (depth == 0 && [OYDelimeter isCloseDelimeter:first]) {
         [[[OYParserException alloc] initWithMessage:[NSString stringWithFormat:@"unmatched closing delimeter: %@ does not close any open delimeter", first] node:first] raise];
         return nil;
     } else {
