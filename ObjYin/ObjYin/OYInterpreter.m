@@ -41,7 +41,7 @@
 int interpreter_main(int argc, const char ** argv){
     NSString *argv1 = nil;
     if (argc > 1) {
-        argv1 = [NSString stringWithCString:argv[1] encoding:NSUTF8StringEncoding];
+        argv1 = @(argv[1]);
         if (!([argv1 hasPrefix:@"file://"] || [argv1 hasPrefix:@"http://"])) {
             NSFileManager *fm = [NSFileManager new];
             if ([argv1 hasPrefix:@"./"]) {

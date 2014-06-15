@@ -226,7 +226,7 @@ BOOL isIdentifierChar(unichar c) {
     return isalnum(c) || [identifierCharSet characterIsMember:c];
 }
 int parser_main(int argc, char ** argv) {
-    NSString *argv1 = [NSString stringWithCString:argv[1] encoding:NSUTF8StringEncoding];
+    NSString *argv1 = @(argv[1]);
     NSURL *URL = [NSURL URLWithString:argv1];
     OYLexer *lex = [[OYLexer alloc] initWithURL:URL];
     

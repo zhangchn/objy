@@ -90,7 +90,7 @@ static OYTypeChecker *selfChecker;
 @end
 
 int typechecker_main(int argc, char **argv) {
-    NSString *argv1 = [NSString stringWithCString:argv[1] encoding:NSUTF8StringEncoding];
+    NSString *argv1 = @(argv[1]);
     OYTypeChecker *tc = [[OYTypeChecker alloc] initWithURL:[NSURL URLWithString:argv1]];
     selfChecker = tc;
     OYValue *result = [tc typeCheckURL:[NSURL URLWithString:argv1]];

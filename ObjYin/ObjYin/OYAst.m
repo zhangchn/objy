@@ -588,7 +588,7 @@
 + (void)addDelimiterPairOpen:(NSString *)open close:(NSString *)close {
     [[OYDelimeter delims] addObject:open];
     [[OYDelimeter delims] addObject:close];
-    [[OYDelimeter delimMap] setObject:close forKey:open];
+    [OYDelimeter delimMap][open] = close;
 }
 + (void)addDelimiter:(NSString *)delim {
     [[OYDelimeter delims] addObject:delim];
@@ -606,7 +606,7 @@
     if (![open isKindOfClass:[OYDelimeter class]] || ![close isKindOfClass:[OYDelimeter class]]) {
         return NO;
     }
-    NSString *matched = [[OYDelimeter delimMap] objectForKey:((OYDelimeter *)open).shape];
+    NSString *matched = [OYDelimeter delimMap][((OYDelimeter *)open).shape];
     return matched && [matched isEqualToString:((OYDelimeter *)close).shape];
 }
 
