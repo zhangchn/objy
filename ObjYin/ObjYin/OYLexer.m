@@ -30,6 +30,24 @@
     return self;
 }
 
+- (instancetype)initWithString:(NSString *)string {
+    self = [super init];
+    if (self) {
+        _URL = nil;
+        _text = string;
+        _offset = 0;
+        _line = 0;
+        _col = 0;
+        if (!_text) {
+            NSAssert(0, @"text cannot be nil!");
+        }
+        [OYDelimeter addDelimiterPairOpen:@"(" close:@")"];
+        [OYDelimeter addDelimiterPairOpen:@"[" close:@"]"];
+        [OYDelimeter addDelimiter:@"."];
+    }
+    return self;
+}
+
 - (void)forward {
     if ([self.text characterAtIndex:self.offset] == '\n') {
         _line ++;

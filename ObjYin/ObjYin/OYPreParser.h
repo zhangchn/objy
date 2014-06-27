@@ -19,3 +19,16 @@
 - (OYNode *)nextNode1:(int)depth;
 - (OYNode *)parse;
 @end
+
+
+NSString *const OYParseErrorDomain;
+NS_ENUM(NSInteger, OYParseErrorCode) {
+    OYParseErrorCodeUnclosedDelimeter,
+    OYParseErrorCodeDelimeterPairMismatch,
+};
+
+@interface OYPreParser (Incomplete)
+- (instancetype)initWithString:(NSString *)string;
+- (id)nextIncompleteNodeAtDepth:(int)depth;
+- (id)parseIncomplete;
+@end

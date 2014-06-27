@@ -19,6 +19,15 @@ OYNode *parseURL(NSURL *URL) {
     return parseNode(prenode);
 }
 
+id parseIncompleteString(NSString *string) {
+    OYPreParser *preparser = [[OYPreParser alloc] initWithString:string];
+    id prenode = [preparser parseIncomplete];
+    if ([prenode isKindOfClass:[NSError class]]) {
+        return prenode;
+    }
+    return parseNode(prenode);
+}
+
 
 OYNode *parseNode(OYNode *prenode) {
     

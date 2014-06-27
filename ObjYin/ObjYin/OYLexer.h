@@ -17,6 +17,7 @@
 @property (nonatomic) NSInteger col;
 
 - (id)initWithURL:(NSURL *)URL;
+- (instancetype)initWithString:(NSString *)string;
 - (void)forward;
 - (void)skip:(NSInteger )n;
 - (BOOL)skipSpaces;

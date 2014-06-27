@@ -14,6 +14,7 @@
 
 
 OYNode *parseURL(NSURL *URL);
+id parseIncompleteString(NSString *string);
 OYNode *parseNode(OYNode *prenode);
 NSMutableArray *parseList(NSArray *prenodes);
 NSMutableDictionary *parseMap(NSArray *prenodes);

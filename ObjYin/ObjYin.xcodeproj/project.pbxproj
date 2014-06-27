@@ -11,6 +11,7 @@
 		DB8090621928C8DD0024608C /* OYPreParser.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8090611928C8DD0024608C /* OYPreParser.m */; };
 		DB8090651928CA180024608C /* OYLexer.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8090641928CA180024608C /* OYLexer.m */; };
 		DB8090691928E3400024608C /* OYParserException.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8090681928E3400024608C /* OYParserException.m */; };
+		DBED4702195DE29E00D07A40 /* OYREPL.m in Sources */ = {isa = PBXBuildFile; fileRef = DBED4701195DE29E00D07A40 /* OYREPL.m */; };
 		DBF9829E192665A200024C0C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBF9829D192665A200024C0C /* Foundation.framework */; };
 		DBF982A1192665A300024C0C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF982A0192665A300024C0C /* main.m */; };
 		DBF982A5192665A300024C0C /* ObjYin.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = DBF982A4192665A300024C0C /* ObjYin.1 */; };
@@ -57,6 +58,8 @@
 		DB8090641928CA180024608C /* OYLexer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OYLexer.m; sourceTree = "<group>"; };
 		DB8090671928E3400024608C /* OYParserException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OYParserException.h; sourceTree = "<group>"; };
 		DB8090681928E3400024608C /* OYParserException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OYParserException.m; sourceTree = "<group>"; };
+		DBED4700195DE29E00D07A40 /* OYREPL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OYREPL.h; sourceTree = "<group>"; };
+		DBED4701195DE29E00D07A40 /* OYREPL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OYREPL.m; sourceTree = "<group>"; };
 		DBF9829A192665A200024C0C /* ObjYin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ObjYin; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF9829D192665A200024C0C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DBF982A0192665A300024C0C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -176,6 +179,8 @@
 				DBF982BE1927A11600024C0C /* OYBinder.m */,
 				DBF982AB192665E200024C0C /* OYInterpreter.h */,
 				DBF982AC192665E200024C0C /* OYInterpreter.m */,
+				DBED4700195DE29E00D07A40 /* OYREPL.h */,
+				DBED4701195DE29E00D07A40 /* OYREPL.m */,
 				DBF982BA19279A9E00024C0C /* OYPrimitives.h */,
 				DBF982BB19279A9E00024C0C /* OYPrimitives.m */,
 				DBF982B4192674E800024C0C /* OYScope.h */,
@@ -254,6 +259,7 @@
 				DB8090651928CA180024608C /* OYLexer.m in Sources */,
 				DBF982B01926688E00024C0C /* OYAst.m in Sources */,
 				DBF982BF1927A11600024C0C /* OYBinder.m in Sources */,
+				DBED4702195DE29E00D07A40 /* OYREPL.m in Sources */,
 				DB8090621928C8DD0024608C /* OYPreParser.m in Sources */,
 				DBF982B319266E6C00024C0C /* OYValue.m in Sources */,
 				DB80905F1928C36B0024608C /* OYParser.m in Sources */,

@@ -8,13 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "OYInterpreter.h"
+#import "OYREPL.h"
+
 int main(int argc, const char * argv[])
 {
 
+    int r;
     @autoreleasepool {
         
-        interpreter_main(argc, argv);
+//        interpreter_main(argc, argv);
+        r = repl_main(argc, argv);
     }
-    return 0;
+    return r;
 }
 

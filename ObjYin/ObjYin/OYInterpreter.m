@@ -65,3 +65,27 @@ int interpreter_main(int argc, const char ** argv){
 
     return 0;
 }
+
+NSString *const OYInterpreterErrorDomain = @"interp-err";
+
+
+@implementation OYInterpreter (Incomplete)
+- (id)interpretIncompleteText:(NSString *)text inScope:(OYScope *)scope {
+    OYNode *program;
+    @try {
+        program = parseIncompleteString(text);
+    }
+    @catch (NSException *exception) {
+//        fprintf(stderr, "parsing error: %s\n", exception.description.UTF8String);
+//        fprintf(stderr, "%s\n", [[exception.callStackSymbols componentsJoinedByString:@"\n"] UTF8String]);
+        return [NSError errorWithDomain:OYInterpreterErrorDomain code:OYInterpreterErrorNotCatched userInfo:@{NSLocalizedFailureReasonErrorKey : exception.description}];
+    }
+    if ([program isKindOfClass:[NSError class]]) {
+        return program;
+    } else if ([program isKindOfClass:[OYValue class]]){
+        return [program interpretInScope:scope];
+    } else {
+        return nil;
+    }
+}
+@end
