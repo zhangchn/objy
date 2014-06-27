@@ -24,7 +24,7 @@
     return self;
 }
 
-- (OYValue *)interpreteContentOfURL:(NSURL *)URL {
+- (OYValue *)interpretContentOfURL:(NSURL *)URL {
     OYNode *program;
     @try {
         program = parseURL(URL);
@@ -61,7 +61,7 @@ int interpreter_main(int argc, const char ** argv){
     }
     NSURL *URL = [NSURL URLWithString:argv1];
     OYInterpreter *i = [[OYInterpreter alloc] initWithContentOfURL:URL];
-    printf("%s\n", [[[i interpreteContentOfURL:URL] description] UTF8String]);
+    printf("%s\n", [[[i interpretContentOfURL:URL] description] UTF8String]);
 
     return 0;
 }

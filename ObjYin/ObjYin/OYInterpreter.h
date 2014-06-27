@@ -11,7 +11,7 @@
 @class OYValue;
 @interface OYInterpreter : NSObject
 - (instancetype)initWithContentOfURL:(NSURL *)URL;
-- (OYValue *)interpreteContentOfURL:(NSURL *)URL;
+- (OYValue *)interpretContentOfURL:(NSURL *)URL;
 @end
 
 int interpreter_main(int argc, const char ** argv);
