@@ -35,8 +35,10 @@
     while (1) {
         if (buffer.length) {
             printf("... ");
+            fflush(stdout);
         } else {
             printf(">>> ");
+            fflush(stdout);
         }
         NSData *data = [input availableData];
         if (data.length) {
@@ -65,10 +67,12 @@
 
 - (void)dumpError:(NSError *)error {
     fprintf(stderr, "%s\n", error.localizedFailureReason.UTF8String);
+    fflush(stderr);
 }
 
 - (void)printResult:(OYValue *)value {
     printf("%s\n", value ? value.description.UTF8String : "");
+    fflush(stdout);
 }
 
 @end

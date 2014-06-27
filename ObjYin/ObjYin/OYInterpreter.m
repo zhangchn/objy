@@ -82,7 +82,7 @@ NSString *const OYInterpreterErrorDomain = @"interp-err";
     }
     if ([program isKindOfClass:[NSError class]]) {
         return program;
-    } else if ([program isKindOfClass:[OYValue class]]){
+    } else if ([program isKindOfClass:[OYNode class]]){
         return [program interpretInScope:scope];
     } else {
         return nil;

@@ -60,6 +60,7 @@
 		DB8090681928E3400024608C /* OYParserException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OYParserException.m; sourceTree = "<group>"; };
 		DBED4700195DE29E00D07A40 /* OYREPL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OYREPL.h; sourceTree = "<group>"; };
 		DBED4701195DE29E00D07A40 /* OYREPL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OYREPL.m; sourceTree = "<group>"; };
+		DBED4705195DFF9000D07A40 /* plus.yin */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = plus.yin; path = Tests/plus.yin; sourceTree = SOURCE_ROOT; };
 		DBF9829A192665A200024C0C /* ObjYin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ObjYin; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF9829D192665A200024C0C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DBF982A0192665A300024C0C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -118,6 +119,7 @@
 		DB4B01BC192E24C7007DAE26 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				DBED4705195DFF9000D07A40 /* plus.yin */,
 				DB4B01BE19345A72007DAE26 /* curry1.yin */,
 				DB4B0199192B2743007DAE26 /* array.yin */,
 				DB4B019A192B2743007DAE26 /* expr.yin */,
