@@ -35,7 +35,7 @@ It seems that ObjYin has successfully interpreted `expr.yin`, `array.yin` and `r
 
 An experimental REPL has been added as a building target `oyi`.
 
-Try it in Terminal.app or Xcode debugging console by simply running it in Xcode!
+Try it in Terminal.app or Xcode debug console by simply running it in Xcode!
 
 ### Missing parts
 
