@@ -9,8 +9,12 @@
 #import "OYREPL.h"
 #import "OYInterpreter.h"
 #import "OYPreParser.h"
+#import "OYLexer.h"
 #import "OYScope.h"
 #import "OYValue.h"
+#import "OYAst.h"
+
+#import <objc/objc-runtime.h>
 
 @interface OYREPL ()
 @property (strong) OYInterpreter *interpreter;
@@ -45,24 +49,43 @@
             [buffer appendData:data];
         } else {
             // Ctrl + d
-            break;
+            if (buffer.length) {
+                buffer.length = 0;
+                fprintf(stderr, "(Input aborted).\n");
+                fflush(stderr);
+                continue;
+            } else {
+                break;
+            }
         }
         
         
         NSString *string = [[NSString alloc] initWithData:buffer encoding:NSUTF8StringEncoding];
         id result = [self.interpreter interpretIncompleteText:string inScope:self.persistantScope];
         if ([result isKindOfClass:[NSError class]]) {
-            if (![[result domain] isEqualToString:OYParseErrorDomain]
-                || ![result code] == OYParseErrorCodeUnclosedDelimeter) {
+            if (![self isTolerableError:result]) {
                 [self dumpError:result];
-                [buffer setLength:0];
+                buffer.length = 0;
             }
             continue;
         } else {
             [self printResult:result];
-            [buffer setLength:0];
+            buffer.length = 0;
         }
     }
+}
+
+- (BOOL)isTolerableError:(NSError *)error {
+    if ([error.domain isEqualToString:OYParseErrorDomain]
+        && error.code == OYParseErrorCodeUnclosedDelimeter) {
+        return YES;
+    }
+    if ([error.domain isEqualToString:OYLexerErrorDomain]
+        && error.code == OYLexerErrorRunAwayString) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (void)dumpError:(NSError *)error {
@@ -74,10 +97,29 @@
     printf("%s\n", value ? value.description.UTF8String : "");
     fflush(stdout);
 }
+@end
 
+
+@interface OYBlock (Swizzle)
+- (OYValue *)interpretInScope2:(OYScope *)scope;
+@end
+
+@implementation OYBlock (Swizzle)
+- (OYValue *)interpretInScope2:(OYScope *)scope {
+    for (int i = 0; i < self.statements.count - 1; i++) {
+        [self.statements[i] interpretInScope:scope];
+    }
+    return [self.statements[self.statements.count - 1] interpretInScope:scope];
+}
 @end
 
 int repl_main(int argc, const char **argv) {
+    // Swizzle the implementation of -[OYBlock interpretInScope:] using an alternative scope instance, so that the modifications made to the environment by the block can be saved.
+    Method original = class_getInstanceMethod([OYBlock class], @selector(interpretInScope:));
+    Method replacement = class_getInstanceMethod([OYBlock class], @selector(interpretInScope2:));
+    
+    method_exchangeImplementations(original, replacement);
+    
     OYREPL *repl = [OYREPL new];
     [repl run];
     return 0;
