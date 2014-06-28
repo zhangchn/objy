@@ -31,6 +31,12 @@ In Xcode, to debug using a test script, add parameters in Edit schemes-> Run Obj
 
 It seems that ObjYin has successfully interpreted `expr.yin`, `array.yin` and `recursion-direct.yin`. Bugs may exist for others.
 
+### REPL
+
+An experimental REPL has been added as a building target `oyi`.
+
+Try it in Terminal.app or Xcode debugging console by simply running it in Xcode!
+
 ### Missing parts
 
 BigInteger support is missing, however, the upstream has not fully supported it either.
