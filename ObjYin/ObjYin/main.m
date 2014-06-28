@@ -15,9 +15,7 @@ int main(int argc, const char * argv[])
 
     int r;
     @autoreleasepool {
-        
-//        r = interpreter_main(argc, argv);
-        r = repl_main(argc, argv);
+        r = interpreter_main(argc, argv);
     }
     return r;
 }

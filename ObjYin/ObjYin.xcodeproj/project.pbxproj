@@ -11,7 +11,21 @@
 		DB8090621928C8DD0024608C /* OYPreParser.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8090611928C8DD0024608C /* OYPreParser.m */; };
 		DB8090651928CA180024608C /* OYLexer.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8090641928CA180024608C /* OYLexer.m */; };
 		DB8090691928E3400024608C /* OYParserException.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8090681928E3400024608C /* OYParserException.m */; };
-		DBED4702195DE29E00D07A40 /* OYREPL.m in Sources */ = {isa = PBXBuildFile; fileRef = DBED4701195DE29E00D07A40 /* OYREPL.m */; };
+		DBED470B195ED42400D07A40 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBF9829D192665A200024C0C /* Foundation.framework */; };
+		DBED470E195ED42400D07A40 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DBED470D195ED42400D07A40 /* main.m */; };
+		DBED4712195ED42400D07A40 /* oyi.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = DBED4711195ED42400D07A40 /* oyi.1 */; };
+		DBED4718195ED50A00D07A40 /* OYREPL.m in Sources */ = {isa = PBXBuildFile; fileRef = DBED4717195ED50A00D07A40 /* OYREPL.m */; };
+		DBED4719195ED58400D07A40 /* OYAst.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF982AF1926688E00024C0C /* OYAst.m */; };
+		DBED471A195ED58400D07A40 /* OYBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF982BE1927A11600024C0C /* OYBinder.m */; };
+		DBED471B195ED58400D07A40 /* OYInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF982AC192665E200024C0C /* OYInterpreter.m */; };
+		DBED471C195ED58400D07A40 /* OYPrimitives.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF982BB19279A9E00024C0C /* OYPrimitives.m */; };
+		DBED471D195ED58400D07A40 /* OYScope.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF982B5192674E800024C0C /* OYScope.m */; };
+		DBED471E195ED58400D07A40 /* OYTypeChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF982B8192689B300024C0C /* OYTypeChecker.m */; };
+		DBED471F195ED58400D07A40 /* OYParser.m in Sources */ = {isa = PBXBuildFile; fileRef = DB80905E1928C36B0024608C /* OYParser.m */; };
+		DBED4720195ED58400D07A40 /* OYPreParser.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8090611928C8DD0024608C /* OYPreParser.m */; };
+		DBED4721195ED58400D07A40 /* OYParserException.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8090681928E3400024608C /* OYParserException.m */; };
+		DBED4722195ED58400D07A40 /* OYLexer.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8090641928CA180024608C /* OYLexer.m */; };
+		DBED4723195ED58400D07A40 /* OYValue.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF982B219266E6C00024C0C /* OYValue.m */; };
 		DBF9829E192665A200024C0C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBF9829D192665A200024C0C /* Foundation.framework */; };
 		DBF982A1192665A300024C0C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF982A0192665A300024C0C /* main.m */; };
 		DBF982A5192665A300024C0C /* ObjYin.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = DBF982A4192665A300024C0C /* ObjYin.1 */; };
@@ -25,6 +39,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		DBED4708195ED42400D07A40 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				DBED4712195ED42400D07A40 /* oyi.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		DBF98298192665A200024C0C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -58,9 +82,13 @@
 		DB8090641928CA180024608C /* OYLexer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OYLexer.m; sourceTree = "<group>"; };
 		DB8090671928E3400024608C /* OYParserException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OYParserException.h; sourceTree = "<group>"; };
 		DB8090681928E3400024608C /* OYParserException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OYParserException.m; sourceTree = "<group>"; };
-		DBED4700195DE29E00D07A40 /* OYREPL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OYREPL.h; sourceTree = "<group>"; };
-		DBED4701195DE29E00D07A40 /* OYREPL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OYREPL.m; sourceTree = "<group>"; };
 		DBED4705195DFF9000D07A40 /* plus.yin */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = plus.yin; path = Tests/plus.yin; sourceTree = SOURCE_ROOT; };
+		DBED470A195ED42400D07A40 /* oyi */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = oyi; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBED470D195ED42400D07A40 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DBED4710195ED42400D07A40 /* oyi-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "oyi-Prefix.pch"; sourceTree = "<group>"; };
+		DBED4711195ED42400D07A40 /* oyi.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = oyi.1; sourceTree = "<group>"; };
+		DBED4716195ED50A00D07A40 /* OYREPL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OYREPL.h; sourceTree = "<group>"; };
+		DBED4717195ED50A00D07A40 /* OYREPL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OYREPL.m; sourceTree = "<group>"; };
 		DBF9829A192665A200024C0C /* ObjYin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ObjYin; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBF9829D192665A200024C0C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DBF982A0192665A300024C0C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -83,6 +111,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DBED4707195ED42400D07A40 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBED470B195ED42400D07A40 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DBF98297192665A200024C0C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -145,10 +181,31 @@
 			name = Parser;
 			sourceTree = "<group>";
 		};
+		DBED470C195ED42400D07A40 /* oyi */ = {
+			isa = PBXGroup;
+			children = (
+				DBED4716195ED50A00D07A40 /* OYREPL.h */,
+				DBED4717195ED50A00D07A40 /* OYREPL.m */,
+				DBED470D195ED42400D07A40 /* main.m */,
+				DBED4711195ED42400D07A40 /* oyi.1 */,
+				DBED470F195ED42400D07A40 /* Supporting Files */,
+			);
+			path = oyi;
+			sourceTree = "<group>";
+		};
+		DBED470F195ED42400D07A40 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DBED4710195ED42400D07A40 /* oyi-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		DBF98291192665A200024C0C = {
 			isa = PBXGroup;
 			children = (
 				DBF9829F192665A200024C0C /* ObjYin */,
+				DBED470C195ED42400D07A40 /* oyi */,
 				DBF9829C192665A200024C0C /* Frameworks */,
 				DBF9829B192665A200024C0C /* Products */,
 			);
@@ -158,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				DBF9829A192665A200024C0C /* ObjYin */,
+				DBED470A195ED42400D07A40 /* oyi */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -181,8 +239,6 @@
 				DBF982BE1927A11600024C0C /* OYBinder.m */,
 				DBF982AB192665E200024C0C /* OYInterpreter.h */,
 				DBF982AC192665E200024C0C /* OYInterpreter.m */,
-				DBED4700195DE29E00D07A40 /* OYREPL.h */,
-				DBED4701195DE29E00D07A40 /* OYREPL.m */,
 				DBF982BA19279A9E00024C0C /* OYPrimitives.h */,
 				DBF982BB19279A9E00024C0C /* OYPrimitives.m */,
 				DBF982B4192674E800024C0C /* OYScope.h */,
@@ -210,6 +266,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		DBED4709195ED42400D07A40 /* oyi */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DBED4713195ED42400D07A40 /* Build configuration list for PBXNativeTarget "oyi" */;
+			buildPhases = (
+				DBED4706195ED42400D07A40 /* Sources */,
+				DBED4707195ED42400D07A40 /* Frameworks */,
+				DBED4708195ED42400D07A40 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = oyi;
+			productName = oyi;
+			productReference = DBED470A195ED42400D07A40 /* oyi */;
+			productType = "com.apple.product-type.tool";
+		};
 		DBF98299192665A200024C0C /* ObjYin */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DBF982A8192665A300024C0C /* Build configuration list for PBXNativeTarget "ObjYin" */;
@@ -249,11 +322,32 @@
 			projectRoot = "";
 			targets = (
 				DBF98299192665A200024C0C /* ObjYin */,
+				DBED4709195ED42400D07A40 /* oyi */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DBED4706195ED42400D07A40 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBED4722195ED58400D07A40 /* OYLexer.m in Sources */,
+				DBED471D195ED58400D07A40 /* OYScope.m in Sources */,
+				DBED471E195ED58400D07A40 /* OYTypeChecker.m in Sources */,
+				DBED4720195ED58400D07A40 /* OYPreParser.m in Sources */,
+				DBED4723195ED58400D07A40 /* OYValue.m in Sources */,
+				DBED4719195ED58400D07A40 /* OYAst.m in Sources */,
+				DBED4721195ED58400D07A40 /* OYParserException.m in Sources */,
+				DBED471F195ED58400D07A40 /* OYParser.m in Sources */,
+				DBED471B195ED58400D07A40 /* OYInterpreter.m in Sources */,
+				DBED471A195ED58400D07A40 /* OYBinder.m in Sources */,
+				DBED471C195ED58400D07A40 /* OYPrimitives.m in Sources */,
+				DBED4718195ED50A00D07A40 /* OYREPL.m in Sources */,
+				DBED470E195ED42400D07A40 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DBF98296192665A200024C0C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -261,7 +355,6 @@
 				DB8090651928CA180024608C /* OYLexer.m in Sources */,
 				DBF982B01926688E00024C0C /* OYAst.m in Sources */,
 				DBF982BF1927A11600024C0C /* OYBinder.m in Sources */,
-				DBED4702195DE29E00D07A40 /* OYREPL.m in Sources */,
 				DB8090621928C8DD0024608C /* OYPreParser.m in Sources */,
 				DBF982B319266E6C00024C0C /* OYValue.m in Sources */,
 				DB80905F1928C36B0024608C /* OYParser.m in Sources */,
@@ -277,6 +370,28 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		DBED4714195ED42400D07A40 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "oyi/oyi-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DBED4715195ED42400D07A40 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "oyi/oyi-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		DBF982A6192665A300024C0C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -368,6 +483,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DBED4713195ED42400D07A40 /* Build configuration list for PBXNativeTarget "oyi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBED4714195ED42400D07A40 /* Debug */,
+				DBED4715195ED42400D07A40 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		DBF98295192665A200024C0C /* Build configuration list for PBXProject "ObjYin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
