@@ -261,3 +261,121 @@ int parser_main(int argc, char ** argv) {
     }
     return 0;
 }
+
+
+NSString *const OYLexerErrorDomain = @"lexer-err";
+
+@implementation OYLexer (Incomplete)
+
+- (id)nextIncompleteToken {
+    [self skipSpacesAndComments];
+    
+    // end of file
+    if (_offset >= _text.length) {
+        return nil;
+    }
+    
+    {
+        // case 1. delimiters
+        unichar cur = [_text characterAtIndex:_offset];
+        if ([OYDelimeter isDelimiter:cur]) {
+            OYNode *ret = [[OYDelimeter alloc] initWithURL:self.URL shape:[NSString stringWithCharacters:&cur length:1] start:_offset end:_offset + 1 line:_line column:_col];
+            
+            [self forward];
+            return ret;
+        }
+    }
+    
+    // case 2. string
+    if ([[_text substringFromIndex:_offset] hasPrefix:@"\""]) {
+        NSError *err = nil;
+        OYNode *stringNode = [self scanString:&err];
+        if (err) {
+            return err;
+        } else {
+            return stringNode;
+        }
+    }
+    
+    // case 3. number
+    if (isnumber([_text characterAtIndex:_offset]) ||
+        (([_text characterAtIndex:_offset] == '+' || [_text characterAtIndex:_offset] == '-')
+         && _offset + 1 < _text.length && isnumber([_text characterAtIndex:_offset + 1])))
+    {
+        return [self scanNumber];
+    }
+    
+    // case 4. name or keyword
+    if ([OYLexer isIdentifierChar:[_text characterAtIndex:_offset]]) {
+        return [self scanNameOrKeyword];
+    }
+    
+    // case 5. syntax error
+    NSString *message = [NSString stringWithFormat:@"unrecognized syntax: %@", [_text substringWithRange:NSMakeRange(_offset, 1)]];
+    NSError *error = [NSError errorWithDomain:OYLexerErrorDomain code:OYLexerErrorSyntaxUnrecognized userInfo:@{NSLocalizedFailureReasonErrorKey: message}];
+    return error;
+}
+
+- (OYNode *)scanString:(__autoreleasing NSError **)error  {
+    NSInteger start = _offset;
+    NSInteger startLine = _line;
+    NSInteger startCol = _col;
+    [self skip:[@"\"" length]];    // skip quote mark
+    
+    while (true) {
+        // detect runaway strings at end of file or at newline
+        if (_offset >= _text.length || [_text characterAtIndex:_offset] == '\n') {
+            *error = [NSError errorWithDomain:OYLexerErrorDomain code:OYLexerErrorRunAwayString userInfo:@{NSLocalizedFailureReasonErrorKey: @"runaway string"}];
+            return nil;
+        }
+        
+        // end of string
+        else if ([[_text substringFromIndex:_offset] hasPrefix:@"\""]) {
+            [self skip:[@"\"" length]];    // skip quote mark // Constants.STRING_END.length
+            break;
+        }
+        
+        // skip any char after STRING_ESCAPE
+        else if ([[_text substringFromIndex:_offset] hasPrefix:@"\\"] && _offset + 1 < _text.length) {
+            [self skip:[@"\\" length] + 1];
+            //skip(Constants.STRING_ESCAPE.length() + 1);
+        }
+        
+        // other characters (string content)
+        else {
+            [self forward];
+        }
+    }
+    
+    NSInteger end = _offset;
+    NSString *content = [_text substringWithRange:NSMakeRange(start + [@"\"" length], end - [@"\"" length] - start - [@"\"" length])];
+    return [[OYStr alloc] initWithURL:self.URL value:content start:start end:end line:startLine column:startCol];
+}
+
+- (OYNode *)scanNumber:(__autoreleasing NSError **)error {
+    NSInteger start = _offset;
+    NSInteger startLine = _line;
+    NSInteger startCol = _col;
+    
+    while (_offset < _text.length && [OYLexer isNumberChar:[_text characterAtIndex:_offset]]) {
+        [self forward];
+    }
+    
+    NSString *content = [_text substringWithRange:NSMakeRange(start, _offset - start)];
+    
+    OYIntNum *intNum = [OYIntNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol];
+    if (intNum) {
+        return intNum;
+    } else {
+        OYFloatNum *floatNum = [OYFloatNum parseURL:self.URL content:content start:start end:_offset line:startLine column:startCol];
+        if (floatNum) {
+            return floatNum;
+        } else {
+            NSString *message = [NSString stringWithFormat:@"incorrect number format: %@", content];
+            *error = [NSError errorWithDomain:OYLexerErrorDomain code:OYLexerErrorIncorrectNumberFormat userInfo:@{NSLocalizedFailureReasonErrorKey : message}];
+            return nil;
+        }
+    }
+}
+
+@end

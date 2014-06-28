@@ -34,3 +34,13 @@
 
 BOOL isIdentifierChar(unichar c);
 int parser_main(int argc, char ** argv);
+
+NSString *const OYLexerErrorDomain;
+NS_ENUM(NSInteger, OYLexerError) {
+    OYLexerErrorSyntaxUnrecognized,
+    OYLexerErrorRunAwayString,
+    OYLexerErrorIncorrectNumberFormat,
+};
+@interface OYLexer (Incomplete)
+- (id)nextIncompleteToken;
+@end

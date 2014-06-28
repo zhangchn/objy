@@ -87,7 +87,7 @@ NSString *const OYParseErrorDomain = @"parse-err";
 }
 
 - (id)nextIncompleteNodeAtDepth:(int)depth {
-    OYNode *first = [_lexer nextToken];
+    OYNode *first = [_lexer nextIncompleteToken];
     
     // end of file
     if (!first) {
@@ -102,6 +102,9 @@ NSString *const OYParseErrorDomain = @"parse-err";
         for (next = [self nextIncompleteNodeAtDepth:depth + 1];
              ![OYDelimeter matchDelimeterOpen:first close:next];
              next = [self nextIncompleteNodeAtDepth:depth + 1]) {
+            if ([next isKindOfClass:[NSError class]]) {
+                return next;
+            }
             if (!next) {
                 NSString *description = [@"unclosed delimeter till end of input: " stringByAppendingString:first.description];
                 return [[NSError alloc] initWithDomain:OYParseErrorDomain code:OYParseErrorCodeUnclosedDelimeter userInfo:@{NSLocalizedFailureReasonErrorKey : description}];
